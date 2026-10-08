@@ -1,74 +1,74 @@
-import Image from "next/image"
-import { ArrowRight, Check } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { GhlEmbed } from "@/components/landing/ghl-embed"
-import { bookingCalendarSrc } from "@/content/embeds"
+import { bookingCalendarSrc, whatsappLink } from "@/content/embeds"
 import { trialDays } from "@/content/pricing"
+import { company } from "@/content/site"
 
-const promises = [`${trialDays}-day free trial`, "Setup included", "No contracts", "Support in 4 languages"]
+// Ways to reach a person. Rows without a link are left out (set them in src/content/embeds.ts and site.ts).
+const contactRows = [
+  {
+    label: "Book a free setup call",
+    href: bookingCalendarSrc ?? (company.email ? `mailto:${company.email}?subject=Free%20setup%20call` : null),
+  },
+  { label: "Message us on WhatsApp", href: whatsappLink },
+  { label: company.email ? `Email ${company.email}` : null, href: company.email ? `mailto:${company.email}` : null },
+].filter((row): row is { label: string; href: string } => Boolean(row.label && row.href))
 
 export function FinalCtaSection() {
   return (
     <section
+      id="book-call"
       aria-labelledby="final-cta-title"
-      className="bg-paper p-2 sm:p-3"
+      className="scroll-mt-24 bg-paper p-2 sm:p-3"
     >
-      {/* Dark rounded card inside a cream frame, same as the hero */}
+      {/* Dark rounded card inside a cream frame. Editorial layout so it doesn't repeat the hero. */}
       <div className="dark relative overflow-hidden bg-background py-20 text-foreground lg:py-28" style={{ borderRadius: 28 }}>
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-        <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
-          <Image
-            src="/brand/torch-mark.png"
-            alt=""
-            width={64}
-            height={64}
-            className="size-14 rounded-2xl bg-white/5 p-2"
-          />
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
           <h2
             id="final-cta-title"
-            className="mt-8 text-4xl leading-[1.05] font-light tracking-tight text-balance sm:text-5xl"
+            className="max-w-5xl text-5xl leading-[0.95] font-light tracking-tighter text-balance sm:text-7xl lg:text-8xl"
           >
-            Turn every call into a customer.
-            <span className="mt-2 block text-foreground/45">Your setup is on us.</span>
+            Your next customer is about to <span className="inline-block origin-bottom animate-ring text-brand motion-reduce:animate-none">call.</span>
           </h2>
 
-          <ul className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
-            {promises.map((p) => (
-              <li key={p} className="flex items-center gap-2">
-                <Check className="size-4 text-brand" aria-hidden="true" />
-                {p}
-              </li>
-            ))}
-          </ul>
+          <div className="mt-16 grid gap-12 border-t border-foreground/10 pt-10 md:grid-cols-2 md:gap-16 lg:mt-24">
+            <div>
+              <p className="text-sm text-muted-foreground">Try it yourself</p>
+              <p className="mt-3 max-w-md text-xl leading-snug text-pretty sm:text-2xl">
+                {trialDays} days free. We set everything up, you just use it. No contract.
+              </p>
+              <Button size="xl" className="mt-8" nativeButton={false} render={<a href="#pricing" />}>
+                Start my free trial
+                <ArrowRight data-icon="inline-end" />
+              </Button>
+            </div>
 
-          <div className="mt-10 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
-            <Button
-              size="xl"
-              nativeButton={false}
-              render={<a href="#pricing" />}
-            >
-              Start my free trial
-              <ArrowRight data-icon="inline-end" />
-            </Button>
-            <Button size="xl" variant="outline" nativeButton={false} render={<a href="#book-call" />}>
-              Book a free setup call
-            </Button>
+            <div>
+              <p className="text-sm text-muted-foreground">Rather talk to a person?</p>
+              <p className="mt-3 max-w-md text-xl leading-snug text-pretty sm:text-2xl">
+                We speak English, Italiano, Français and <bdi lang="ar">العربية</bdi>.
+              </p>
+              <ul className="mt-6 border-t border-foreground/10">
+                {contactRows.map((row) => (
+                  <li key={row.label}>
+                    <a
+                      href={row.href}
+                      {...(row.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      className="group flex min-h-12 items-center justify-between gap-4 border-b border-foreground/10 py-3 transition-colors hover:text-brand focus-visible:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+                    >
+                      {row.label}
+                      <ArrowUpRight
+                        className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand motion-reduce:transition-none"
+                        aria-hidden="true"
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
-
-        <div id="book-call" className="mx-auto mt-20 max-w-4xl scroll-mt-24 border-t pt-14">
-          <h3 className="text-center text-xl font-medium sm:text-2xl">
-            Pick a time for your free setup call
-          </h3>
-          <p className="mt-2 text-center text-sm text-muted-foreground">
-            A short chat with our team. No tech talk.
-          </p>
-          <div className="mt-8">
-            <GhlEmbed src={bookingCalendarSrc} title="Booking calendar" minHeight={420} />
-          </div>
-        </div>
-      </div>
       </div>
     </section>
   )

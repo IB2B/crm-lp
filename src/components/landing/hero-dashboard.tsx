@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils"
 
 // Mock dashboard cards for the hero. All figures are illustrative.
+// They rise in after the hero text, then their bars and gauge fill (timings match hero.tsx).
 
 const funnel = [
   { label: "Captured", filled: 3 },
@@ -59,8 +60,11 @@ function FunnelCard() {
                   key={i}
                   className={cn(
                     "h-3 rounded-[3px]",
-                    i < step.filled ? "bg-brand" : "bg-white ring-1 ring-black/5"
+                    i < step.filled
+                      ? "animate-fade-in bg-brand motion-reduce:animate-none"
+                      : "bg-white ring-1 ring-black/5"
                   )}
+                  style={i < step.filled ? { animationDelay: `${1700 + i * 70}ms` } : undefined}
                 />
               ))}
             </div>
@@ -106,6 +110,8 @@ function SpeedCard() {
             strokeWidth="8"
             strokeLinecap="round"
             strokeDasharray={`${arc * value} ${arc}`}
+            className="animate-gauge motion-reduce:animate-none"
+            style={{ "--gauge-length": arc * value, animationDelay: "1800ms" } as React.CSSProperties}
           />
         </svg>
         <div className="absolute inset-x-0 bottom-0 text-center">
@@ -122,7 +128,10 @@ function SpeedCard() {
               <span className="font-medium tabular-nums">{m.value}</span>
             </div>
             <div className="mt-1.5 h-1 rounded-full bg-black/10">
-              <div className="h-full rounded-full bg-brand" style={{ width: `${m.progress}%` }} />
+              <div
+                className="h-full origin-left animate-draw-line rounded-full bg-brand motion-reduce:animate-none"
+                style={{ width: `${m.progress}%`, animationDelay: "1900ms" }}
+              />
             </div>
           </li>
         ))}
@@ -148,7 +157,10 @@ function PipelineCard() {
               <span className="font-medium tabular-nums">{bar.value}%</span>
             </div>
             <div className="mt-1.5 h-4 overflow-hidden rounded-md bg-black/10">
-              <div className="h-full rounded-md" style={{ width: `${bar.value}%`, background: stripes }} />
+              <div
+                className="h-full origin-left animate-draw-line rounded-md motion-reduce:animate-none"
+                style={{ width: `${bar.value}%`, background: stripes, animationDelay: "1900ms" }}
+              />
             </div>
           </div>
         ))}
@@ -180,18 +192,36 @@ export function HeroDashboard() {
 
       <div aria-hidden="true" className="relative flex justify-center pt-10">
         {/* Connector: a line from under the buttons down to the bracket joining the side cards */}
-        <span className="absolute -top-9 left-1/2 hidden size-2 -translate-x-1/2 rounded-full bg-brand shadow-[0_0_12px] shadow-brand md:block" />
-        <span className="absolute -top-7 left-1/2 hidden h-[4.75rem] w-px -translate-x-1/2 bg-gradient-to-b from-brand/80 to-white/20 md:block" />
-        <span className="absolute top-10 left-[18%] right-[18%] hidden h-10 rounded-t-2xl border-x border-t border-white/20 md:block" />
+        <span
+          className="absolute -top-9 left-1/2 hidden size-2 -translate-x-1/2 animate-fade-in rounded-full bg-brand shadow-[0_0_12px] shadow-brand motion-reduce:animate-none md:block"
+          style={{ animationDelay: "1050ms" }}
+        />
+        <span className="absolute -top-7 left-1/2 hidden h-[4.75rem] w-px -translate-x-1/2 md:block">
+          <span
+            className="block size-full origin-top animate-draw-down bg-gradient-to-b from-brand/80 to-white/20 motion-reduce:animate-none"
+            style={{ animationDelay: "1100ms" }}
+          />
+        </span>
+        <span
+          className="absolute top-10 left-[18%] right-[18%] hidden h-10 animate-fade-in rounded-t-2xl border-x border-t border-white/20 motion-reduce:animate-none md:block"
+          style={{ animationDelay: "1250ms" }}
+        />
 
         <div className="absolute top-20 left-0 hidden -rotate-2 md:block lg:left-[4%]">
-          <SpeedCard />
+          <div className="animate-rise-in motion-reduce:animate-none" style={{ animationDelay: "1450ms" }}>
+            <SpeedCard />
+          </div>
         </div>
         <div className="absolute top-20 right-0 hidden rotate-2 md:block lg:right-[4%]">
-          <PipelineCard />
+          <div className="animate-rise-in motion-reduce:animate-none" style={{ animationDelay: "1550ms" }}>
+            <PipelineCard />
+          </div>
         </div>
 
-        <div className="relative z-10 w-full max-w-sm">
+        <div
+          className="relative z-10 w-full max-w-sm animate-rise-in motion-reduce:animate-none"
+          style={{ animationDelay: "1300ms" }}
+        >
           <FunnelCard />
         </div>
       </div>
