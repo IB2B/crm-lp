@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local notes and tooling, not part of the site
+/reports/
+/research_notes/
+/.claude/
