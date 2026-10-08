@@ -19,8 +19,8 @@ export const legalLinks: { label: string; href: string | null }[] = [
 /** Public URL of the site, used for share images and metadata. TODO(ib2b): set the real domain. */
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
 
-/** Hidden until there are 3 real client quotes (with permission). */
-export const showTestimonials = false
+/** The section also hides itself while src/content/testimonials.ts is empty. */
+export const showTestimonials = true
 
 export const socialLinks: { label: string; href: string | null }[] = [
   { label: "Instagram", href: null },

@@ -1,49 +1,27 @@
 import { cn } from "@/lib/utils"
 
-// TODO(ib2b): replace every placeholder with a real client quote (with permission).
-// Best quotes mention a concrete result: more bookings, fewer no-shows, time saved.
-const featured = {
-  quote:
-    "[Client quote: what changed after TORCH, in their own words. Ideally a real result, like more bookings or fewer missed calls.]",
-  name: "[Client name]",
-  business: "[Business · City]",
-}
+import { testimonials, type Testimonial } from "@/content/testimonials"
 
-const short = [
-  { quote: "[Quote about how easy the setup was]", business: "[Dental clinic · City]" },
-  { quote: "[Quote about fewer missed calls]", business: "[Beauty salon · City]" },
-  { quote: "[Quote about WhatsApp replies]", business: "[Real estate agency · City]" },
-  { quote: "[Quote about more Google reviews]", business: "[Restaurant · City]" },
-  { quote: "[Quote about support in their language]", business: "[Travel agency · City]" },
-  { quote: "[Quote about saving time every week]", business: "[Marketing agency · City]" },
-  { quote: "[Quote about fewer no-shows]", business: "[Physio clinic · City]" },
-  { quote: "[Quote about follow-ups that run alone]", business: "[Sales agency · City]" },
-]
+// Real quotes only (see src/content/testimonials.ts). First one is featured, the rest slide.
+const [featured, ...short] = testimonials
+const half = Math.ceil(short.length / 2)
+const rowA = short.slice(0, half)
+const rowB = short.slice(half)
 
-const rowA = short.slice(0, 4)
-const rowB = short.slice(4)
-
-function PlaceholderTag() {
-  return (
-    <span className="rounded-full border border-dashed border-brand px-2 py-0.5 text-[11px] font-semibold tracking-wide text-brand uppercase">
-      Placeholder
-    </span>
-  )
-}
-
-function Avatar() {
+function Avatar({ name }: { name: string }) {
+  const initials = name.split(" ").map((p) => p[0]).join("").slice(0, 2)
   return (
     <span
       aria-hidden="true"
-      className="flex size-10 shrink-0 items-center justify-center rounded-full border border-dashed text-sm text-muted-foreground"
+      className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand/15 text-sm font-medium text-brand"
     >
-      ?
+      {initials}
     </span>
   )
 }
 
 // One row of quotes, duplicated so the loop is seamless.
-function MarqueeRow({ items, reverse }: { items: typeof short; reverse?: boolean }) {
+function MarqueeRow({ items, reverse }: { items: Testimonial[]; reverse?: boolean }) {
   return (
     <div className="group flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
       <ul
@@ -58,11 +36,11 @@ function MarqueeRow({ items, reverse }: { items: typeof short; reverse?: boolean
             aria-hidden={i >= items.length}
             className="me-4 flex w-80 shrink-0 items-start gap-3 rounded-2xl border bg-background p-5"
           >
-            <Avatar />
+            <Avatar name={t.name} />
             <div>
               <p className="text-[15px] leading-snug">&ldquo;{t.quote}&rdquo;</p>
               <p className="mt-2 text-xs text-muted-foreground">
-                [Client name] · {t.business}
+                {t.name} · {t.business}
               </p>
             </div>
           </li>
@@ -73,6 +51,8 @@ function MarqueeRow({ items, reverse }: { items: typeof short; reverse?: boolean
 }
 
 export function TestimonialsSection() {
+  if (!featured) return null
+
   return (
     <section aria-labelledby="testimonials-title" className="overflow-hidden py-20 lg:py-28">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
@@ -86,7 +66,6 @@ export function TestimonialsSection() {
               What our clients say.
             </h2>
           </div>
-          <PlaceholderTag />
         </div>
 
         <figure className="mt-12 border-t pt-10 lg:mt-16 lg:pt-14">
@@ -96,11 +75,11 @@ export function TestimonialsSection() {
           >
             &ldquo;
           </span>
-          <blockquote className="mt-2 max-w-4xl text-2xl leading-snug font-light tracking-tight text-balance text-muted-foreground sm:text-4xl">
+          <blockquote className="mt-2 max-w-4xl text-2xl leading-snug font-light tracking-tight text-balance sm:text-4xl">
             {featured.quote}
           </blockquote>
           <figcaption className="mt-8 flex items-center gap-3">
-            <Avatar />
+            <Avatar name={featured.name} />
             <div>
               <p className="font-medium">{featured.name}</p>
               <p className="text-sm text-muted-foreground">{featured.business}</p>
@@ -109,10 +88,12 @@ export function TestimonialsSection() {
         </figure>
       </div>
 
+      {short.length ? (
       <div className="mt-16 space-y-4" aria-label="More client quotes">
-        <MarqueeRow items={rowA} />
-        <MarqueeRow items={rowB} reverse />
+        {rowA.length ? <MarqueeRow items={rowA} /> : null}
+        {rowB.length ? <MarqueeRow items={rowB} reverse /> : null}
       </div>
+      ) : null}
     </section>
   )
 }
