@@ -3,6 +3,7 @@
 import { CalendarDays, Menu, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { bookingLinkProps } from "@/content/embeds"
 import {
   Sheet,
   SheetClose,
@@ -60,7 +61,7 @@ export function MobileMenu() {
         <SheetFooter className="mt-auto gap-3 border-t p-4">
           <SheetClose
             nativeButton={false}
-            render={<Button size="xl" variant="outline" nativeButton={false} render={<a href="#book-call" />} />}
+            render={<Button size="xl" variant="outline" nativeButton={false} render={<a {...bookingLinkProps} />} />}
           >
             <CalendarDays data-icon="inline-start" />
             Book a free setup call

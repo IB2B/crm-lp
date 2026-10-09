@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { bookingLinkProps } from "@/content/embeds"
 import { BrandLogo } from "@/components/landing/brand-logo"
 import { HeaderShell } from "@/components/landing/header-shell"
 import { MobileMenu } from "@/components/landing/mobile-menu"
@@ -37,7 +38,7 @@ export function SiteHeader() {
             <Button
               variant="ghost"
               nativeButton={false}
-              render={<a href="#book-call" />}
+              render={<a {...bookingLinkProps} />}
               className="hidden h-10 px-3 lg:inline-flex"
             >
               Book a call

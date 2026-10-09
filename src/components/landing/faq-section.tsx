@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { whatsappLink } from "@/content/embeds"
+import { bookingLinkProps, whatsappLink } from "@/content/embeds"
 import { company } from "@/content/site"
 import { trialDays } from "@/content/pricing"
 
@@ -84,7 +84,7 @@ export function FaqSection() {
           ) : null}
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
-            <Button size="xl" nativeButton={false} render={<a href="#book-call" />}>
+            <Button size="xl" nativeButton={false} render={<a {...bookingLinkProps} />}>
               <CalendarDays data-icon="inline-start" />
               Book a free call
             </Button>
@@ -92,8 +92,7 @@ export function FaqSection() {
               size="xl"
               variant="outline"
               nativeButton={false}
-              // TODO(ib2b): set whatsappLink in src/content/embeds.ts
-              render={<a href={whatsappLink ?? "#book-call"} />}
+              render={<a href={whatsappLink} target="_blank" rel="noopener noreferrer" />}
               className="bg-background"
             >
               <MessageCircle data-icon="inline-start" />

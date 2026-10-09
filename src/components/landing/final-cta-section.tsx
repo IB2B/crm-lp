@@ -1,19 +1,17 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { bookingCalendarSrc, whatsappLink } from "@/content/embeds"
+import { bookingCalendarSrc, phoneDisplay, phoneLink, whatsappLink } from "@/content/embeds"
 import { trialDays } from "@/content/pricing"
 import { company } from "@/content/site"
 
-// Ways to reach a person. Rows without a link are left out (set them in src/content/embeds.ts and site.ts).
+// Ways to reach a person (links live in src/content/embeds.ts and site.ts).
 const contactRows = [
-  {
-    label: "Book a free setup call",
-    href: bookingCalendarSrc ?? (company.email ? `mailto:${company.email}?subject=Free%20setup%20call` : null),
-  },
+  { label: "Book a free setup call", href: bookingCalendarSrc },
   { label: "Message us on WhatsApp", href: whatsappLink },
-  { label: company.email ? `Email ${company.email}` : null, href: company.email ? `mailto:${company.email}` : null },
-].filter((row): row is { label: string; href: string } => Boolean(row.label && row.href))
+  { label: `Call ${phoneDisplay}`, href: phoneLink },
+  { label: `Email ${company.email}`, href: `mailto:${company.email}` },
+]
 
 export function FinalCtaSection() {
   return (

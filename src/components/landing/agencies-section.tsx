@@ -4,6 +4,7 @@ import { useId, useState } from "react"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { company } from "@/content/site"
 
 const steps = ["Book a call", "We brand it", "You sell, we support"]
 
@@ -141,7 +142,7 @@ export function AgenciesSection() {
             <Button
               size="xl"
               nativeButton={false}
-              render={<a href="#become-partner" />}
+              render={<a href={`mailto:${company.salesEmail}?subject=Become%20a%20TORCH%20partner`} />}
               className="mt-10 w-full sm:w-auto"
             >
               Become a partner

@@ -1,19 +1,20 @@
-// Company details, legal links and social links shown in the footer.
-// TODO(ib2b): fill in the real values. Leave a value null to show a clear placeholder.
+// Company details, legal links and social links shown in the footer (source: intelligentb2b.com).
 
 export const company = {
   name: "Intelligent B2B",
-  legalName: null as string | null, // e.g. "Intelligent B2B S.R.L."
-  vat: null as string | null, // P.IVA
-  address: null as string | null,
+  legalName: "Intelligent B2B Group SRL" as string | null,
+  vat: "RO51222966" as string | null, // Romanian VAT number, so labelled "VAT"
+  address: "Aleea Avrig, Nr. 3, Sector 2, 021851 Bucharest, Romania" as string | null,
   email: "support@intelligentb2b.com" as string | null,
+  /** For "Become a partner" and agency questions. */
+  salesEmail: "sales@intelligentb2b.com",
 }
 
-// Placeholder pages exist at these paths. TODO(ib2b): replace their content with the real legal texts.
+// Points to the legal pages on intelligentb2b.com for now.
 export const legalLinks: { label: string; href: string | null }[] = [
-  { label: "Terms", href: "/terms" },
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Cookie Policy", href: "/cookie-policy" },
+  { label: "Terms", href: "https://intelligentb2b.com/termini-e-condizioni" },
+  { label: "Privacy Policy", href: "https://intelligentb2b.com/informativa-sulla-privacy" },
+  { label: "Cookie Policy", href: "https://intelligentb2b.com/cookie-policy-eu/" },
 ]
 
 /** Public URL of the site, used for share images and metadata. TODO(ib2b): set the real domain. */
@@ -22,13 +23,14 @@ export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:300
 /** The section also hides itself while src/content/testimonials.ts is empty. */
 export const showTestimonials = true
 
+// Links left null show a red "missing link" dot. TODO(ib2b): add Instagram, Facebook, TikTok and YouTube.
 export const socialLinks: { label: string; href: string | null }[] = [
   { label: "Instagram", href: null },
   { label: "Facebook", href: null },
-  { label: "LinkedIn", href: null },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/intelligent-b2b-group-srl/" },
   { label: "TikTok", href: null },
   { label: "YouTube", href: null },
-  { label: "WhatsApp", href: null },
+  { label: "WhatsApp", href: "https://wa.me/393395622204" },
 ]
 
 /**

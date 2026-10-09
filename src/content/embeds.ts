@@ -1,8 +1,16 @@
-// GoHighLevel links. Leads must go into GHL, not a custom backend.
-// TODO(ib2b): paste the links from GHL (Calendars → Share → Permanent link).
+// GoHighLevel and contact links. Leads must go into GHL, not a custom backend.
 
-/** Booking page link for "Book a free setup call", e.g. "https://api.leadconnectorhq.com/widget/booking/XXXX". */
-export const bookingCalendarSrc: string | null = null
+/** GHL booking page, opened by every "Book a free setup call" button. */
+export const bookingCalendarSrc = "https://api.leadconnectorhq.com/widget/booking/xulJqZlg7Upe9bX3rnKt"
 
-/** WhatsApp link for "WhatsApp us" buttons, e.g. "https://wa.me/390000000000". */
-export const whatsappLink: string | null = null
+/** Spread onto an <a> to open the booking page in a new tab. */
+export const bookingLinkProps = {
+  href: bookingCalendarSrc,
+  target: "_blank",
+  rel: "noopener noreferrer",
+} as const
+
+/** Phone / WhatsApp: +39 339 5622 204 */
+export const phoneDisplay = "+39 339 5622 204"
+export const phoneLink = "tel:+393395622204"
+export const whatsappLink = "https://wa.me/393395622204"

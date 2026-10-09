@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { bookingLinkProps } from "@/content/embeds"
 
 // Everyday moments a busy owner recognises. Plain words, no jargon.
 const moments = [
@@ -40,7 +41,7 @@ export function ProblemSection() {
           <Button
             size="xl"
             nativeButton={false}
-            render={<a href="#book-call" />}
+            render={<a {...bookingLinkProps} />}
             className="mt-8 w-full sm:w-auto"
           >
             Book a free setup call

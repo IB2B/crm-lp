@@ -2,6 +2,7 @@ import Image from "next/image"
 import { ArrowRight, CalendarDays } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { bookingLinkProps } from "@/content/embeds"
 import { HeroDashboard } from "@/components/landing/hero-dashboard"
 
 // TODO(ib2b): placeholder portraits. Replace with real team photos in /public/team.
@@ -100,7 +101,7 @@ export function Hero() {
               size="xl"
               variant="outline"
               nativeButton={false}
-              render={<a href="#book-call" />}
+              render={<a {...bookingLinkProps} />}
             >
               <CalendarDays data-icon="inline-start" />
               Book a free setup call

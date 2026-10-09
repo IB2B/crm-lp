@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { bookingLinkProps } from "@/content/embeds"
 
 // TODO(ib2b): confirm the "live in 7 days" timeline (from torch-build-spec.md).
 
@@ -54,7 +55,7 @@ export function HowItWorksSection() {
           <Button
             size="xl"
             nativeButton={false}
-            render={<a href="#book-call" />}
+            render={<a {...bookingLinkProps} />}
             className="w-full sm:w-auto"
           >
             Book a free setup call

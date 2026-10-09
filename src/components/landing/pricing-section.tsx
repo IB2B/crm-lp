@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ArrowRight, Check } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { bookingCalendarSrc } from "@/content/embeds"
 import { cn } from "@/lib/utils"
 import {
   allCheckoutLinksSet,
@@ -136,7 +137,8 @@ export function PricingSection() {
                   render={
                     <a
                       // Without a checkout link, the button opens the booking calendar.
-                      href={link ?? "#book-call"}
+                      href={link ?? bookingCalendarSrc}
+                      {...(link ? {} : { target: "_blank", rel: "noopener noreferrer" })}
                       data-plan={plan.id}
                       data-billing={billing}
                       onClick={(e) => {

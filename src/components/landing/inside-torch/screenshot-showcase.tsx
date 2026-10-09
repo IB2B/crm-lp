@@ -19,29 +19,25 @@ type Shot = { src: string; width: number; height: number; alt: string }
 export function ScreenshotShowcase({ src, width, height, alt }: Shot) {
   return (
     <Dialog>
-      <div className="rounded-2xl bg-paper p-2 sm:p-3">
+      {/* Soft white bezel with a warm shadow, sized to fill the deck slot */}
+      <div className="size-full rounded-[20px] bg-white p-1.5 shadow-[0_30px_60px_-25px_rgb(60_40_20/0.35)] ring-1 ring-black/5 sm:p-2">
         <DialogTrigger
           render={
             <button
               type="button"
-              className="group relative block w-full cursor-zoom-in overflow-hidden rounded-xl border border-black/10 bg-card text-start shadow-xl shadow-black/10 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="group relative block size-full cursor-zoom-in overflow-hidden rounded-[14px] bg-white text-start outline-none focus-visible:ring-3 focus-visible:ring-brand/60"
             />
           }
         >
-          <div className="flex h-7 items-center gap-1.5 border-b bg-muted/50 px-3">
-            <span className="size-2.5 rounded-full bg-foreground/15" />
-            <span className="size-2.5 rounded-full bg-foreground/15" />
-            <span className="size-2.5 rounded-full bg-foreground/15" />
-          </div>
           <Image
             src={src}
             alt={alt}
             width={width}
             height={height}
             unoptimized
-            className="h-auto w-full"
+            className="size-full object-contain object-top"
           />
-          <span className="absolute end-3 bottom-3 flex items-center gap-1.5 rounded-full bg-foreground/85 px-3 py-1.5 text-xs font-medium text-background opacity-90 shadow-lg transition-opacity group-hover:opacity-100">
+          <span className="absolute start-3 bottom-3 flex items-center gap-1.5 rounded-full bg-paper-foreground/90 px-3 py-1.5 text-xs font-medium text-paper opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
             <Maximize2 className="size-3.5" />
             Click to enlarge
           </span>

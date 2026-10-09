@@ -2,8 +2,8 @@ import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 
 import { NewsletterForm } from "@/components/landing/newsletter-form"
-import { whatsappLink } from "@/content/embeds"
-import { company, legalLinks, socialLinks } from "@/content/site"
+import { bookingCalendarSrc, phoneLink, whatsappLink } from "@/content/embeds"
+import { company, legalLinks, newsletterWebhook, socialLinks } from "@/content/site"
 
 const columns = [
   {
@@ -19,19 +19,30 @@ const columns = [
     title: "Company",
     links: [
       { href: "#agencies", label: "For agencies" },
-      { href: "#book-call", label: "Book a call" },
+      { href: bookingCalendarSrc, label: "Book a call" },
       { href: "#faq", label: "FAQ" },
     ],
   },
   {
     title: "Support",
     links: [
-      { href: whatsappLink ?? "#book-call", label: "WhatsApp" },
-      { href: company.email ? `mailto:${company.email}` : "#book-call", label: "Email us" },
-      { href: "#book-call", label: "Video call" },
+      { href: whatsappLink, label: "WhatsApp" },
+      { href: phoneLink, label: "Call us" },
+      { href: `mailto:${company.email}`, label: "Email us" },
+      { href: bookingCalendarSrc, label: "Video call" },
     ],
   },
 ]
+
+// Red signal for anything still waiting for a link (set it in src/content/site.ts).
+export function MissingLinkDot() {
+  return (
+    <span className="inline-flex items-center" title="Link missing">
+      <span aria-hidden="true" className="size-2 rounded-full bg-red-500" />
+      <span className="sr-only">(link missing)</span>
+    </span>
+  )
+}
 
 const linkClass =
   "rounded transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
@@ -57,7 +68,10 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <p className="text-xl font-light tracking-tight">Subscribe to our newsletter</p>
+            <p className="flex items-center gap-2 text-xl font-light tracking-tight">
+              Subscribe to our newsletter
+              {newsletterWebhook ? null : <MissingLinkDot />}
+            </p>
             <p className="mt-2 text-sm text-muted-foreground">
               Simple tips to win more customers, once a month.
             </p>
@@ -75,13 +89,15 @@ export function SiteFooter() {
               {socialLinks.map((s) => (
                 <li key={s.label}>
                   <a
-                    // TODO(ib2b): social links are placeholders until set in src/content/site.ts
                     href={s.href ?? "#"}
                     target={s.href ? "_blank" : undefined}
                     rel={s.href ? "noopener noreferrer" : undefined}
                     className="flex items-center justify-between border-b border-foreground/15 py-2.5 text-sm transition-colors hover:border-foreground/50"
                   >
-                    {s.label}
+                    <span className="flex items-center gap-2">
+                      {s.label}
+                      {s.href ? null : <MissingLinkDot />}
+                    </span>
                     <ArrowUpRight className="size-4 text-muted-foreground" aria-hidden="true" />
                   </a>
                 </li>
@@ -98,7 +114,11 @@ export function SiteFooter() {
                 <ul className="mt-4 space-y-3 text-sm">
                   {col.links.map((l) => (
                     <li key={l.label}>
-                      <a href={l.href} className={linkClass}>
+                      <a
+                        href={l.href}
+                        {...(l.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        className={linkClass}
+                      >
                         {l.label}
                       </a>
                     </li>
@@ -115,8 +135,8 @@ export function SiteFooter() {
             <span>
               © {year} TORCH by {company.legalName ?? company.name}. All rights reserved.
             </span>
-            <span>P.IVA {company.vat ?? "[to add]"}</span>
-            {company.address ? <span>{company.address}</span> : <span>[Address to add]</span>}
+            {company.vat ? <span>VAT {company.vat}</span> : null}
+            {company.address ? <span>{company.address}</span> : null}
             {company.email ? (
               <a href={`mailto:${company.email}`} className={linkClass}>
                 {company.email}
@@ -126,7 +146,7 @@ export function SiteFooter() {
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {legalLinks.map((l) => (
               <li key={l.label}>
-                <a href={l.href ?? "#"} className={linkClass}>
+                <a href={l.href ?? "#"} target="_blank" rel="noopener noreferrer" className={linkClass}>
                   {l.label}
                   {l.href ? null : " [link to add]"}
                 </a>
