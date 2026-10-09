@@ -2,6 +2,8 @@
 
 import {
   Building2,
+  Handshake,
+  Megaphone,
   Plane,
   Scissors,
   Smile,
@@ -51,6 +53,22 @@ const industries = [
     title: "Quotes that turn into trips.",
     text: "Every quote gets a friendly follow-up, so travellers don't book somewhere else.",
     message: "Hi Paolo, did you get a chance to look at your Greece quote? Happy to answer any questions.",
+  },
+  {
+    value: "marketing-agencies",
+    label: "Marketing agencies",
+    icon: Megaphone,
+    title: "Every ad lead gets a reply.",
+    text: "Leads from your clients' ads get an answer in seconds, and your clients can see what happened to every one.",
+    message: "Hi Giulia, thanks for your request from our Facebook ad. When's a good time for a quick call?",
+  },
+  {
+    value: "sales-agencies",
+    label: "Sales agencies",
+    icon: Handshake,
+    title: "No deal left waiting.",
+    text: "New leads get a reply straight away, and TORCH reminds your team to follow up until the deal is closed.",
+    message: "Hi Davide, just checking in on the offer we sent on Tuesday. Any questions before you decide?",
   },
 ]
 
