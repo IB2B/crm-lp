@@ -37,11 +37,11 @@ const faqs = [
   },
   {
     q: "Is my data safe? Is TORCH GDPR compliant?",
-    a: "Yes. Your data is stored on secure servers, and you can export or delete it anytime. We follow GDPR and can sign a data processing agreement (DPA) with you on request.",
+    a: "Yes. Your data is stored on secure servers, and you can export or delete it anytime. We follow GDPR, and our data processing agreement (DPA) covers the customer data you keep in TORCH.",
   },
   {
     q: "What happens if I cancel?",
-    a: "You keep access until the end of the period you paid for, and you can export your contacts first. If you cancel in the first 30 days, you get your money back.",
+    a: "You keep access until the end of the period you paid for, and you can export your data for 30 days after that. Payments are not refunded, so use the free trial to decide.",
   },
   {
     q: "How is TORCH different from GoHighLevel?",
