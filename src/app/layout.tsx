@@ -3,6 +3,8 @@ import { DM_Sans } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { siteUrl } from "@/content/site";
+import { MetaPixel } from "@/components/analytics/meta-pixel";
+import { CookieBanner } from "@/components/cookie-banner";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -39,6 +41,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       {/* Browser extensions (e.g. ColorZilla's cz-shortcut-listen) inject attributes on <body>. */}
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {children}
+        <CookieBanner />
+        <MetaPixel />
       </body>
     </html>
   );

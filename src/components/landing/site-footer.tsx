@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 
+import { CookieSettingsButton } from "@/components/cookie-banner"
 import { NewsletterForm } from "@/components/landing/newsletter-form"
 import { bookingCalendarSrc, phoneLink, whatsappLink } from "@/content/embeds"
 import { company, legalLinks, newsletterWebhook, socialLinks } from "@/content/site"
@@ -86,18 +87,16 @@ export function SiteFooter() {
           <div>
             <p className="text-xl font-light tracking-tight">Social media</p>
             <ul className="mt-5 grid grid-cols-2 gap-x-6 gap-y-1 sm:grid-cols-3">
-              {socialLinks.map((s) => (
+              {/* Only accounts that exist; add the others in src/content/site.ts to show them */}
+              {socialLinks.flatMap((s) => (s.href ? [{ ...s, href: s.href }] : [])).map((s) => (
                 <li key={s.label}>
                   <a
-                    href={s.href ?? "#"}
-                    target={s.href ? "_blank" : undefined}
-                    rel={s.href ? "noopener noreferrer" : undefined}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center justify-between border-b border-foreground/15 py-2.5 text-sm transition-colors hover:border-foreground/50"
                   >
-                    <span className="flex items-center gap-2">
-                      {s.label}
-                      {s.href ? null : <MissingLinkDot />}
-                    </span>
+                    {s.label}
                     <ArrowUpRight className="size-4 text-muted-foreground" aria-hidden="true" />
                   </a>
                 </li>
@@ -152,6 +151,9 @@ export function SiteFooter() {
                 </a>
               </li>
             ))}
+            <li>
+              <CookieSettingsButton className={`cursor-pointer ${linkClass}`} />
+            </li>
           </ul>
         </div>
       </div>
