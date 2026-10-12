@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import { ArrowRight, Check } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -27,6 +28,143 @@ function ToConfirm({ className }: { className?: string }) {
     >
       To confirm
     </span>
+  )
+}
+
+// Real product screens that peek up from the bottom of the panel (same files as the product tour).
+const peekScreens = [
+  { src: "/platform/inbox.webp", alt: "TORCH inbox with WhatsApp, SMS and email conversations" },
+  { src: "/platform/calendar.webp", alt: "TORCH booking calendar" },
+  { src: "/platform/reviews.webp", alt: "TORCH review requests" },
+]
+
+// Everything shared, in one warm charcoal panel (same colour as the Starter card):
+// a light headline, four plain groups, and a strip of real product screens along the bottom.
+// When the panel scrolls into view it plays once: headline lines slide up, "everything" gets
+// underlined, the divider sweeps across, the groups fade up, then the screens rise from the edge.
+// Without JavaScript or with reduced motion everything simply shows in place.
+const ease = "ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
+
+function IncludedInEveryPlan() {
+  const ref = useRef<HTMLDivElement>(null)
+  // null = not measured yet (render in place), false = waiting below the fold, true = playing
+  const [shown, setShown] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setShown(entry.isIntersecting ? true : (prev) => (prev ? true : false))
+        if (entry.isIntersecting) io.disconnect()
+      },
+      { rootMargin: "0px 0px -25% 0px" }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  const hidden = shown === false
+  const delay = (ms: number) => ({ transitionDelay: shown ? `${ms}ms` : "0ms" })
+
+  return (
+    <div ref={ref} className="warm mt-20 overflow-hidden rounded-3xl bg-background text-foreground lg:mt-24">
+      <div className="px-6 pt-12 sm:px-10 lg:px-14 lg:pt-16">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+          <h3 className="text-4xl font-light tracking-tight sm:text-5xl">
+            {["Every plan comes", "with"].map((line, i) => (
+              <span key={line} className="block overflow-hidden pb-1">
+                <span
+                  className={cn("block transition-transform duration-1000", ease, hidden && "translate-y-full")}
+                  style={delay(i * 120)}
+                >
+                  {line}
+                  {i === 1 ? (
+                    <>
+                      {" "}
+                      <span className="relative text-brand">
+                        everything
+                        <span
+                          aria-hidden="true"
+                          className={cn(
+                            "absolute inset-x-0 -bottom-0.5 h-0.5 origin-left rounded-full bg-brand transition-transform duration-700",
+                            ease,
+                            hidden ? "scale-x-0" : "scale-x-100"
+                          )}
+                          style={delay(700)}
+                        />
+                      </span>
+                      .
+                    </>
+                  ) : null}
+                </span>
+              </span>
+            ))}
+          </h3>
+          <p
+            className={cn(
+              "max-w-sm text-base leading-relaxed text-pretty text-muted-foreground transition-[opacity,translate] duration-700",
+              ease,
+              hidden && "translate-y-3 opacity-0"
+            )}
+            style={delay(300)}
+          >
+            All the tools are in every plan. Plans only differ by locations and how much our team does for you.
+          </p>
+        </div>
+
+        <div
+          aria-hidden="true"
+          className={cn("mt-12 h-px origin-left bg-border transition-transform duration-1000", ease, hidden && "scale-x-0")}
+          style={delay(400)}
+        />
+
+        <div className="grid gap-x-10 gap-y-10 pt-10 sm:grid-cols-2 lg:grid-cols-4">
+          {includedInEveryPlan.map(({ group, items }, col) => (
+            <div
+              key={group}
+              className={cn("transition-[opacity,translate] duration-700", ease, hidden && "translate-y-4 opacity-0")}
+              style={delay(550 + col * 90)}
+            >
+              <h4 className="text-base font-medium">{group}</h4>
+              <ul className="mt-3 space-y-2 text-[15px] leading-relaxed text-muted-foreground">
+                {items.map((f) => (
+                  <li key={f}>{f}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* pt-3 leaves room for the hover lift inside the cropped strip */}
+      <div className="mt-11 grid h-27 grid-cols-2 items-start gap-4 overflow-hidden px-6 pt-3 sm:h-31 sm:grid-cols-3 sm:px-10 lg:h-43 lg:px-14">
+        {peekScreens.map(({ src, alt }, i) => (
+          <div
+            key={src}
+            className={cn(
+              "transition-transform duration-1000",
+              ease,
+              i !== 1 && "sm:mt-6",
+              i === 2 && "hidden sm:block",
+              hidden && "translate-y-full"
+            )}
+            style={delay(900 + (i === 1 ? 0 : 140))}
+          >
+            <div className="overflow-hidden rounded-t-xl border border-b-0 bg-card shadow-2xl shadow-black/40 transition-transform duration-300 ease-out hover:-translate-y-3 motion-reduce:transition-none">
+              <Image
+                src={src}
+                alt={alt}
+                width={1470}
+                height={827}
+                sizes="(min-width: 1024px) 360px, (min-width: 640px) 33vw, 50vw"
+                className="block h-auto w-full"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -125,9 +263,7 @@ export function PricingSection() {
                   ) : (
                     <span>{billing === "monthly" ? "Billed monthly" : "Billed yearly"}</span>
                   )}
-                  {allCheckoutLinksSet ? null : (
-                    <ToConfirm />
-                  )}
+                  {allCheckoutLinksSet ? null : <ToConfirm />}
                 </div>
 
                 <Button
@@ -155,7 +291,7 @@ export function PricingSection() {
                 </Button>
 
                 <div className="mt-8 border-t pt-6">
-                  <p className="text-sm font-medium">Everything included, plus:</p>
+                  <p className="text-sm font-medium">This plan includes</p>
                   <ul className="mt-4 space-y-3 text-sm">
                     {plan.highlights.map((f) => (
                       <li key={f} className="flex items-start gap-2.5">
@@ -170,26 +306,7 @@ export function PricingSection() {
           })}
         </div>
 
-        <div className="mt-16 rounded-3xl bg-paper p-6 text-paper-foreground sm:p-10">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
-            <h3 className="text-2xl font-semibold tracking-tight">Every plan includes every feature.</h3>
-            <p className="max-w-sm text-sm leading-relaxed text-paper-foreground/70">
-              Plans only differ by locations and how much our team does for you.
-            </p>
-          </div>
-          <div className="mt-8 grid gap-8 border-t border-paper-foreground/10 pt-8 sm:grid-cols-2 lg:grid-cols-4">
-            {includedInEveryPlan.map(({ group, items }) => (
-              <div key={group}>
-                <p className="text-sm font-semibold">{group}</p>
-                <ul className="mt-3 space-y-2 text-sm text-paper-foreground/75">
-                  {items.map((f) => (
-                    <li key={f}>{f}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
+        <IncludedInEveryPlan />
 
         <p className="mt-10 text-center text-sm text-muted-foreground">
           {allCheckoutLinksSet ? "" : "Prices and plan contents are placeholders until confirmed. "}

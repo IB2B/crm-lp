@@ -11,7 +11,7 @@ export type Plan = {
   tagline: string
   monthly: number | null
   popular?: boolean
-  /** What makes this plan different (workspaces and service level). */
+  /** What makes this plan different (3 lines, so the cards stay even). Shared features live in includedInEveryPlan. */
   highlights: string[]
   /** GoHighLevel checkout links. Paste them here; null shows the "To confirm" state. */
   checkout: Record<Billing, string | null>
@@ -21,10 +21,14 @@ export const plans: Plan[] = [
   {
     id: "starter",
     name: "Starter",
-    tagline: "For one business that wants every tool, set up for them.",
+    tagline: "Every tool to win more customers, set up for you.",
     monthly: 97,
     popular: true,
-    highlights: ["1 business workspace", "Setup by our team"],
+    highlights: [
+      "Up to 3 businesses or locations",
+      "Full setup by our team",
+      "Chat support from our team",
+    ],
     checkout: {
       monthly: "https://buy.stripe.com/5kQ14p9fZgvugRu4Z36c00s",
       yearly: null, // [PASTE LINK] Starter yearly
@@ -36,8 +40,8 @@ export const plans: Plan[] = [
     tagline: "For growing businesses with more than one location.",
     monthly: 197,
     highlights: [
-      "Up to 5 locations",
-      "Setup by our team",
+      "Up to 5 businesses or locations",
+      "Full setup by our team",
       "1 hour a week with a dedicated consultant",
     ],
     checkout: {
@@ -51,10 +55,9 @@ export const plans: Plan[] = [
     tagline: "For agencies that sell TORCH under their own brand.",
     monthly: 397,
     highlights: [
-      "Unlimited workspaces",
+      "Unlimited businesses and locations",
       "Your own brand: logo and domain",
-      "We build your full setup",
-      "We train your clients",
+      "We build and train your clients",
     ],
     checkout: {
       monthly: null, // [PASTE LINK] Agency monthly
@@ -63,23 +66,23 @@ export const plans: Plan[] = [
   },
 ]
 
-/** Everything included in every plan. */
+/** Everything included in every plan, shown once under the plan cards. */
 export const includedInEveryPlan = [
   {
-    group: "Messages",
-    items: ["One inbox for WhatsApp, SMS, email and social", "Missed-call text back", "AI assistant"],
+    group: "Win more leads",
+    items: ["All the tools to capture more leads", "Missed-call text back", "AI assistant that replies for you"],
   },
   {
-    group: "Bookings",
-    items: ["Online booking & reminders", "Pipeline to track every customer", "Review requests"],
+    group: "Turn them into customers",
+    items: ["Nurture leads into customers", "One inbox for WhatsApp, SMS, email and social", "Review requests"],
   },
   {
-    group: "Marketing",
-    items: ["Email, SMS & WhatsApp campaigns", "Social media planner", "Website & funnel builder"],
+    group: "Bookings and marketing",
+    items: ["Online booking and reminders", "Pipeline and social calendar", "Email, SMS and WhatsApp campaigns"],
   },
   {
-    group: "Your team",
-    items: ["Automations built for you", "Unlimited contacts and users", "iOS & Android app", "Support in Italian, English, French and Arabic"],
+    group: "Your business",
+    items: ["Full website builder", "Unlimited contacts and users", "iOS and Android mobile app", "Support in Italian, English, French and Arabic"],
   },
 ]
 
