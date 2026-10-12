@@ -23,13 +23,14 @@ export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:300
 /** The section also hides itself while src/content/testimonials.ts is empty. */
 export const showTestimonials = true
 
-// Links left null show a red "missing link" dot. TODO(ib2b): add Instagram, Facebook, TikTok and YouTube.
+// Links left null are hidden in the footer. TODO(ib2b): add Facebook.
 export const socialLinks: { label: string; href: string | null }[] = [
-  { label: "Instagram", href: null },
+  { label: "Instagram", href: "https://www.instagram.com/torchcrm/" },
   { label: "Facebook", href: null },
   { label: "LinkedIn", href: "https://www.linkedin.com/company/intelligent-b2b-group-srl/" },
-  { label: "TikTok", href: null },
-  { label: "YouTube", href: null },
+  { label: "TikTok", href: "https://www.tiktok.com/@torchcrm" },
+  { label: "YouTube", href: "https://www.youtube.com/@Intelligentb2b" },
+  { label: "X", href: "https://x.com/torchcrm" },
   { label: "WhatsApp", href: "https://wa.me/393395622204" },
 ]
 
@@ -38,3 +39,9 @@ export const socialLinks: { label: string; href: string | null }[] = [
  * Paste a GHL "Inbound Webhook" URL from Automation → Workflows → trigger "Inbound Webhook".
  */
 export const newsletterWebhook: string | null = null
+
+/**
+ * TORCH booking calendar (GoHighLevel, permanent link). Every "Book a call", "Book a free
+ * setup call" and "Video call" button opens it, and so do plan buttons without a checkout link.
+ */
+export const bookingCalendarSrc = "https://api.leadconnectorhq.com/widget/booking/G0rSuqw8F7nD13Jn91DH"

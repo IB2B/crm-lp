@@ -1,7 +1,9 @@
 // GoHighLevel and contact links. Leads must go into GHL, not a custom backend.
 
-/** GHL booking page, opened by every "Book a free setup call" button. */
-export const bookingCalendarSrc = "https://api.leadconnectorhq.com/widget/booking/xulJqZlg7Upe9bX3rnKt"
+import { bookingCalendarSrc } from "@/content/site"
+
+// The booking link itself lives in src/content/site.ts; re-exported here for existing imports.
+export { bookingCalendarSrc }
 
 /** Spread onto an <a> to open the booking page in a new tab. */
 export const bookingLinkProps = {
