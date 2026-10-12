@@ -4,7 +4,8 @@ import { ArrowUpRight } from "lucide-react"
 import { CookieSettingsButton } from "@/components/cookie-banner"
 import { NewsletterForm } from "@/components/landing/newsletter-form"
 import { bookingCalendarSrc, phoneLink, whatsappLink } from "@/content/embeds"
-import { company, legalLinks, newsletterWebhook, socialLinks } from "@/content/site"
+import { company, legalLinks, socialLinks } from "@/content/site"
+import { newsletterEnabled } from "@/lib/newsletter"
 
 const columns = [
   {
@@ -35,16 +36,6 @@ const columns = [
   },
 ]
 
-// Red signal for anything still waiting for a link (set it in src/content/site.ts).
-export function MissingLinkDot() {
-  return (
-    <span className="inline-flex items-center" title="Link missing">
-      <span aria-hidden="true" className="size-2 rounded-full bg-red-500" />
-      <span className="sr-only">(link missing)</span>
-    </span>
-  )
-}
-
 const linkClass =
   "rounded transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
 
@@ -68,18 +59,18 @@ export function SiteFooter() {
             </p>
           </div>
 
-          <div>
-            <p className="flex items-center gap-2 text-xl font-light tracking-tight">
-              Subscribe to our newsletter
-              {newsletterWebhook ? null : <MissingLinkDot />}
-            </p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Simple tips to win more customers, once a month.
-            </p>
-            <div className="mt-5">
-              <NewsletterForm />
+          {/* Only when GHL_PRIVATE_TOKEN and GHL_LOCATION_ID are set (see .env.example) */}
+          {newsletterEnabled() ? (
+            <div>
+              <p className="text-xl font-light tracking-tight">Subscribe to our newsletter</p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Simple tips to win more customers, once a month.
+              </p>
+              <div className="mt-5">
+                <NewsletterForm />
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
 
         {/* Middle: social + link columns */}
@@ -135,6 +126,7 @@ export function SiteFooter() {
               © {year} TORCH by {company.legalName ?? company.name}. All rights reserved.
             </span>
             {company.vat ? <span>VAT {company.vat}</span> : null}
+            {company.tradeRegister ? <span>Trade Register {company.tradeRegister}</span> : null}
             {company.address ? <span>{company.address}</span> : null}
             {company.email ? (
               <a href={`mailto:${company.email}`} className={linkClass}>
@@ -145,9 +137,8 @@ export function SiteFooter() {
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {legalLinks.map((l) => (
               <li key={l.label}>
-                <a href={l.href ?? "#"} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                <a href={l.href ?? "#"} className={linkClass}>
                   {l.label}
-                  {l.href ? null : " [link to add]"}
                 </a>
               </li>
             ))}
