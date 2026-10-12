@@ -1,13 +1,52 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
+
 import { legalLinks } from "@/content/site"
 import { setConsent, useConsent } from "@/lib/consent"
+import { cn } from "@/lib/utils"
 
 const cookiePolicy = legalLinks.find((l) => l.label === "Cookie Policy")?.href
 
-// Slim dark bar until the visitor decides. "No thanks" is a real button next to "Allow" (GDPR).
+// True while the page section under the bar is dark (dark or warm charcoal sections).
+function useOverDarkSection(ref: React.RefObject<HTMLElement | null>, active: boolean) {
+  const [overDark, setOverDark] = useState(false)
+
+  useEffect(() => {
+    if (!active) return
+    let frame = 0
+    const check = () => {
+      frame = 0
+      const bar = ref.current
+      if (!bar) return
+      const box = bar.getBoundingClientRect()
+      const under = document
+        .elementsFromPoint(box.left + box.width / 2, box.top + box.height / 2)
+        .find((el) => !bar.contains(el))
+      setOverDark(Boolean(under?.closest(".dark, .warm")))
+    }
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(check)
+    }
+    check()
+    window.addEventListener("scroll", schedule, { passive: true })
+    window.addEventListener("resize", schedule)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener("scroll", schedule)
+      window.removeEventListener("resize", schedule)
+    }
+  }, [ref, active])
+
+  return overDark
+}
+
+// Slim bar until the visitor decides. "No thanks" is a real button next to "Allow" (GDPR).
+// It flips colour against the page: light over dark sections, dark over light ones.
 export function CookieBanner() {
   const consent = useConsent()
+  const ref = useRef<HTMLDivElement>(null)
+  const overDark = useOverDarkSection(ref, consent === "pending")
   if (consent !== "pending") return null
 
   function decline() {
@@ -18,13 +57,14 @@ export function CookieBanner() {
 
   return (
     <div
+      ref={ref}
       role="dialog"
       aria-label="Cookie choice"
-      className="dark fixed inset-x-3 bottom-3 z-50 animate-in duration-500 fade-in slide-in-from-bottom-4 motion-reduce:animate-none sm:inset-x-auto sm:start-5 sm:bottom-5"
+      className={cn(overDark ? "" : "dark", "fixed inset-x-3 bottom-3 z-50 animate-in duration-500 fade-in slide-in-from-bottom-4 motion-reduce:animate-none sm:inset-x-auto sm:start-5 sm:bottom-5")}
     >
-      <div className="flex flex-col gap-3 rounded-2xl bg-background py-3 ps-5 pe-3 text-foreground shadow-2xl shadow-black/30 sm:flex-row sm:items-center sm:gap-6 sm:rounded-full">
+      <div className="flex flex-col gap-3 rounded-2xl bg-background py-3 ps-5 pe-3 text-foreground shadow-2xl shadow-black/30 transition-colors duration-300 sm:flex-row sm:items-center sm:gap-6 sm:rounded-full">
         <p className="text-sm text-foreground/80">
-          Mind if we see which ads bring you here?{" "}
+          We use cookies to improve your experience and measure our ads.{" "}
           {cookiePolicy ? (
             <a
               href={cookiePolicy}
