@@ -3,6 +3,7 @@ import { ArrowRight, CalendarDays } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { bookingLinkProps } from "@/content/embeds"
+import { DemoVideoButton } from "@/components/landing/demo-video"
 import { HeroDashboard } from "@/components/landing/hero-dashboard"
 
 // TODO(ib2b): placeholder portraits. Replace with real team photos in /public/team.
@@ -106,6 +107,7 @@ export function Hero() {
               <CalendarDays data-icon="inline-start" />
               Book a free setup call
             </Button>
+            <DemoVideoButton />
           </div>
         </div>
 
