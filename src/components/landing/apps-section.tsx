@@ -1,4 +1,8 @@
 import { brandPaths, type Brand } from "@/components/landing/brand-icons"
+import type { Locale } from "@/i18n/config"
+import type { AppsDict } from "@/i18n/dictionaries/apps"
+
+// Text comes from src/i18n/dictionaries/apps.ts. App names are brand names and are not translated.
 
 // TODO(ib2b): confirm every app below is connected in the TORCH accounts we set up.
 const rows: { name: string; brand: Brand }[][] = [
@@ -33,7 +37,7 @@ const marqueeCss = `
 .torch-marquee.is-reverse { animation-direction: reverse }
 @media (prefers-reduced-motion: reduce) { .torch-marquee { animation: none } }`
 
-export function AppsSection() {
+export function AppsSection({ t }: { t: AppsDict; lang: Locale }) {
   return (
     <section id="apps" aria-labelledby="apps-title" className="scroll-mt-16 overflow-hidden py-16 lg:py-20">
       <style>{marqueeCss}</style>
@@ -41,10 +45,12 @@ export function AppsSection() {
         id="apps-title"
         className="mx-auto max-w-6xl px-4 text-center text-sm font-medium text-muted-foreground sm:px-6"
       >
-        Works with the apps you already use
+        {t.title}
       </h2>
 
+      {/* dir="ltr" keeps the translateX(-50%) loop seamless on right-to-left pages */}
       <div
+        dir="ltr"
         className="mt-8 flex flex-col gap-6"
         style={{ maskImage: "linear-gradient(to right, transparent, black 12%, black 88%, transparent)" }}
       >

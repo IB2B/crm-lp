@@ -5,14 +5,15 @@
 
 export type Billing = "monthly" | "yearly"
 
+export type PlanId = "starter" | "growth" | "agency"
+
+// Plan taglines, highlights and the "included in every plan" list are text, so they live in
+// src/i18n/dictionaries/pricing.ts, keyed by plan id. Plan names stay here: they are brand names, the same in every language.
 export type Plan = {
-  id: string
+  id: PlanId
   name: string
-  tagline: string
   monthly: number | null
   popular?: boolean
-  /** What makes this plan different (3 lines, so the cards stay even). Shared features live in includedInEveryPlan. */
-  highlights: string[]
   /** GoHighLevel checkout links. Paste them here; null shows the "To confirm" state. */
   checkout: Record<Billing, string | null>
 }
@@ -21,14 +22,8 @@ export const plans: Plan[] = [
   {
     id: "starter",
     name: "Starter",
-    tagline: "Every tool to win more customers, set up for you.",
     monthly: 97,
     popular: true,
-    highlights: [
-      "Up to 3 businesses or locations",
-      "Full setup by our team",
-      "Chat support from our team",
-    ],
     checkout: {
       monthly: "https://buy.stripe.com/5kQ14p9fZgvugRu4Z36c00s",
       yearly: null, // [PASTE LINK] Starter yearly
@@ -37,13 +32,7 @@ export const plans: Plan[] = [
   {
     id: "growth",
     name: "Growth",
-    tagline: "For growing businesses with more than one location.",
     monthly: 197,
-    highlights: [
-      "Up to 5 businesses or locations",
-      "Full setup by our team",
-      "1 hour a week with a dedicated consultant",
-    ],
     checkout: {
       monthly: null, // [PASTE LINK] Growth monthly
       yearly: null, // [PASTE LINK] Growth yearly
@@ -52,37 +41,11 @@ export const plans: Plan[] = [
   {
     id: "agency",
     name: "Agency",
-    tagline: "For agencies that sell TORCH under their own brand.",
     monthly: 397,
-    highlights: [
-      "Unlimited businesses and locations",
-      "Your own brand: logo and domain",
-      "We build and train your clients",
-    ],
     checkout: {
       monthly: null, // [PASTE LINK] Agency monthly
       yearly: null, // [PASTE LINK] Agency yearly
     },
-  },
-]
-
-/** Everything included in every plan, shown once under the plan cards. */
-export const includedInEveryPlan = [
-  {
-    group: "Win more leads",
-    items: ["All the tools to capture more leads", "Missed-call text back", "AI assistant that replies for you"],
-  },
-  {
-    group: "Turn them into customers",
-    items: ["Nurture leads into customers", "One inbox for WhatsApp, SMS, email and social", "Review requests"],
-  },
-  {
-    group: "Bookings and marketing",
-    items: ["Online booking and reminders", "Pipeline and social calendar", "Email, SMS and WhatsApp campaigns"],
-  },
-  {
-    group: "Your business",
-    items: ["Full website builder", "Unlimited contacts and users", "iOS and Android mobile app", "Support in Italian, English, French and Arabic"],
   },
 ]
 

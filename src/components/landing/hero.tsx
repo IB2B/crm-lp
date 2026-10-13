@@ -2,9 +2,11 @@ import Image from "next/image"
 import { ArrowRight, CalendarDays } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { bookingLinkProps } from "@/content/embeds"
+import { bookingLinkProps, demoVideoLocale } from "@/content/embeds"
 import { DemoVideoButton } from "@/components/landing/demo-video"
 import { HeroDashboard } from "@/components/landing/hero-dashboard"
+import type { Locale } from "@/i18n/config"
+import type { HeroDict } from "@/i18n/dictionaries/hero"
 
 // TODO(ib2b): placeholder portraits. Replace with real team photos in /public/team.
 const team = [
@@ -16,10 +18,9 @@ const team = [
 
 // Entrance runs as one sequence (ms): team 0, headline words 150-470, second line 550, text 700,
 // buttons 850, underline 1000, connector 1100, cards 1300+ (see hero-dashboard.tsx).
-// Split so each word can rise in on its own. "customer" also gets a drawn underline.
-const headlineWords = ["Never", "miss", "a", "customer", "again."]
-
-export function Hero() {
+// Split so each word can rise in on its own. The highlighted word also gets a drawn underline.
+// Text comes from src/i18n/dictionaries/hero.ts.
+export function Hero({ t, lang }: { t: HeroDict; lang: Locale }) {
   return (
     <section
       aria-labelledby="hero-title"
@@ -45,7 +46,7 @@ export function Hero() {
               ))}
             </div>
             <span aria-hidden="true" className="hidden h-4 w-px bg-border sm:block" />
-            <span>Set up by a real team, not a ticket queue</span>
+            <span>{t.teamBadge}</span>
           </div>
 
           <h1
@@ -53,18 +54,18 @@ export function Hero() {
             className="mt-6 text-4xl font-light tracking-tight text-balance sm:text-5xl"
           >
             <span className="block">
-              {headlineWords.map((word, i) => (
+              {t.headlineWords.map((word, i) => (
                 <span
-                  key={word}
+                  key={i}
                   className="inline-block animate-word-in motion-reduce:animate-none"
                   style={{ animationDelay: `${150 + i * 80}ms` }}
                 >
-                  {word === "customer" ? (
+                  {i === t.headlineHighlight ? (
                     <span className="relative inline-block">
                       {word}
                       <span
                         aria-hidden="true"
-                        className="absolute inset-x-0 -bottom-1 h-[3px] origin-left animate-draw-line rounded-full bg-brand motion-reduce:animate-none"
+                        className="absolute inset-x-0 -bottom-1 h-[3px] origin-left animate-draw-line rtl:origin-right rounded-full bg-brand motion-reduce:animate-none"
                         style={{ animationDelay: "1000ms" }}
                       />
                     </span>
@@ -78,7 +79,7 @@ export function Hero() {
               className="block animate-word-in text-muted-foreground motion-reduce:animate-none"
               style={{ animationDelay: "550ms" }}
             >
-              We build it. You close the deals.
+              {t.headlineSecond}
             </span>
           </h1>
 
@@ -86,8 +87,7 @@ export function Hero() {
             className="mt-5 max-w-xl animate-word-in text-base leading-relaxed text-pretty text-muted-foreground motion-reduce:animate-none sm:text-lg"
             style={{ animationDelay: "700ms" }}
           >
-            TORCH answers missed calls, replies to every message and books
-            appointments while you work. Our team sets it all up for you.
+            {t.intro}
           </p>
 
           <div
@@ -95,8 +95,8 @@ export function Hero() {
             style={{ animationDelay: "850ms" }}
           >
             <Button size="xl" nativeButton={false} render={<a href="#pricing" />}>
-              Start my free trial
-              <ArrowRight data-icon="inline-end" />
+              {t.trialCta}
+              <ArrowRight data-icon="inline-end" className="rtl:-scale-x-100" />
             </Button>
             <Button
               size="xl"
@@ -105,14 +105,15 @@ export function Hero() {
               render={<a {...bookingLinkProps} />}
             >
               <CalendarDays data-icon="inline-start" />
-              Book a free setup call
+              {t.bookCta}
             </Button>
-            <DemoVideoButton />
+            {/* The demo video is recorded in Italian, so it only shows on the Italian page. */}
+            {lang === demoVideoLocale ? <DemoVideoButton t={t.demo} /> : null}
           </div>
         </div>
 
         <div className="relative mt-12 pb-16 md:min-h-[32rem] lg:pb-24">
-          <HeroDashboard />
+          <HeroDashboard t={t.dashboard} lang={lang} />
         </div>
       </div>
       </div>

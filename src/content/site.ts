@@ -12,7 +12,7 @@ export const company = {
   salesEmail: "sales@intelligentb2b.com",
 }
 
-// Legal pages on this site (src/app/terms, src/app/privacy, src/app/cookie-policy).
+// Legal pages on this site (src/app/[lang]/terms, privacy, cookie-policy, dpa); labels come from the dictionaries.
 export const legalLinks: { label: string; href: string | null }[] = [
   { label: "Terms", href: "/terms" },
   { label: "Privacy Policy", href: "/privacy" },

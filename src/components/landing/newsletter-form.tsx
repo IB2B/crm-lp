@@ -3,16 +3,26 @@
 import { useId, useState } from "react"
 import { ArrowRight, Check } from "lucide-react"
 
+import type { NewsletterErrorCode } from "@/app/api/newsletter/route"
+import { localizeHref, type Locale } from "@/i18n/config"
+import type { ChromeDict } from "@/i18n/dictionaries/chrome"
 import { isValidEmail } from "@/lib/email"
 
 type Status = "idle" | "sending" | "done" | "error"
+type ErrorKey = keyof ChromeDict["newsletter"]["errors"]
 
 // Footer signup. Posts to /api/newsletter, which adds the contact to GoHighLevel on the server.
 // The footer only renders this when the GoHighLevel variables are set.
-export function NewsletterForm() {
+// Text comes from src/i18n/dictionaries/chrome.ts (newsletter); the API answers with a `code`.
+export function NewsletterForm({ t, lang }: { t: ChromeDict["newsletter"]; lang: Locale }) {
   const id = useId()
   const [status, setStatus] = useState<Status>("idle")
-  const [message, setMessage] = useState("")
+  const [error, setError] = useState<ErrorKey | null>(null)
+
+  function fail(key: ErrorKey) {
+    setStatus("error")
+    setError(key)
+  }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -20,35 +30,27 @@ export function NewsletterForm() {
     const email = String(data.get("email") ?? "").trim()
     const consent = data.get("consent") === "on"
 
-    if (!isValidEmail(email)) {
-      setStatus("error")
-      setMessage("Please enter a valid email address.")
-      return
-    }
-    if (!consent) {
-      setStatus("error")
-      setMessage("Please tick the box to agree to receive the newsletter.")
-      return
-    }
+    if (!isValidEmail(email)) return fail("invalid_email")
+    if (!consent) return fail("no_consent")
 
     setStatus("sending")
-    setMessage("")
+    setError(null)
     try {
       const res = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, consent }),
       })
-      const result = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null
+      const result = (await res.json().catch(() => null)) as
+        | { ok?: boolean; code?: NewsletterErrorCode }
+        | null
       if (res.ok && result?.ok) {
         setStatus("done")
       } else {
-        setStatus("error")
-        setMessage(result?.error ?? "We couldn't sign you up right now. Please try again in a moment.")
+        fail(result?.code && result.code in t.errors ? result.code : "failed")
       }
     } catch {
-      setStatus("error")
-      setMessage("Couldn't reach the server. Check your connection and try again.")
+      fail("network")
     }
   }
 
@@ -59,7 +61,7 @@ export function NewsletterForm() {
         role="status"
       >
         <Check className="size-4 text-brand" aria-hidden="true" />
-        Thanks, you&apos;re in!
+        {t.done}
       </p>
     )
   }
@@ -67,7 +69,7 @@ export function NewsletterForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="max-w-md">
       <label htmlFor={id} className="sr-only">
-        Your email
+        {t.emailLabel}
       </label>
       <div className="flex items-center gap-2 rounded-xl bg-white p-1.5 text-paper-foreground ring-1 ring-black/5">
         <input
@@ -76,7 +78,7 @@ export function NewsletterForm() {
           type="email"
           required
           autoComplete="email"
-          placeholder="you@business.com"
+          placeholder={t.placeholder}
           aria-invalid={status === "error" || undefined}
           aria-describedby={`${id}-message`}
           className="h-10 min-w-0 flex-1 bg-transparent px-3 text-sm outline-none placeholder:text-paper-foreground/50"
@@ -86,8 +88,8 @@ export function NewsletterForm() {
           disabled={status === "sending"}
           className="flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg bg-brand px-4 text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {status === "sending" ? "Sending…" : "Subscribe"}
-          <ArrowRight className="size-4" aria-hidden="true" />
+          {status === "sending" ? t.sending : t.subscribe}
+          <ArrowRight className="size-4 rtl:-scale-x-100" aria-hidden="true" />
         </button>
       </div>
 
@@ -99,11 +101,11 @@ export function NewsletterForm() {
           className="mt-0.5 size-4 shrink-0 cursor-pointer accent-[var(--brand)]"
         />
         <span>
-          I agree to receive the TORCH newsletter. I can unsubscribe anytime. See our{" "}
-          <a href="/privacy" className="underline underline-offset-4 hover:text-foreground">
-            Privacy Policy
+          {t.consentBefore}{" "}
+          <a href={localizeHref(lang, "/privacy")} className="underline underline-offset-4 hover:text-foreground">
+            {t.privacyLink}
           </a>
-          .
+          {t.consentAfter}
         </span>
       </label>
 
@@ -112,7 +114,7 @@ export function NewsletterForm() {
         role={status === "error" ? "alert" : undefined}
         className="mt-2 min-h-4 text-xs font-medium text-red-600"
       >
-        {status === "error" ? message : null}
+        {status === "error" && error ? t.errors[error] : null}
       </p>
     </form>
   )

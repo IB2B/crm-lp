@@ -12,11 +12,20 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-type Shot = { src: string; width: number; height: number; alt: string }
+type Shot = {
+  src: string
+  width: number
+  height: number
+  alt: string
+  /** Hover hint on the screenshot, already translated. */
+  enlargeLabel: string
+  /** Screen-reader label of the close button, already translated. */
+  closeLabel: string
+}
 
 // A real app screenshot shown crisp (served as-is, no recompression),
 // with click-to-enlarge so every detail is readable.
-export function ScreenshotShowcase({ src, width, height, alt }: Shot) {
+export function ScreenshotShowcase({ src, width, height, alt, enlargeLabel, closeLabel }: Shot) {
   return (
     <Dialog>
       {/* Soft white bezel with a warm shadow, sized to fill the deck slot */}
@@ -39,7 +48,7 @@ export function ScreenshotShowcase({ src, width, height, alt }: Shot) {
           />
           <span className="absolute start-3 bottom-3 flex items-center gap-1.5 rounded-full bg-paper-foreground/90 px-3 py-1.5 text-xs font-medium text-paper opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
             <Maximize2 className="size-3.5" />
-            Click to enlarge
+            {enlargeLabel}
           </span>
         </DialogTrigger>
       </div>
@@ -59,7 +68,7 @@ export function ScreenshotShowcase({ src, width, height, alt }: Shot) {
           }
         >
           <X className="size-5" />
-          <span className="sr-only">Close</span>
+          <span className="sr-only">{closeLabel}</span>
         </DialogClose>
         <Image
           src={src}

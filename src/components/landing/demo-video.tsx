@@ -5,6 +5,7 @@ import { Play, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import type { HeroDict } from "@/i18n/dictionaries/hero"
 
 const WISTIA_MEDIA_ID = "38chcywcfy"
 
@@ -60,20 +61,20 @@ function WistiaPlayer() {
 }
 
 /** "Watch the demo" button for the hero. Opens the Wistia video in a modal. */
-export function DemoVideoButton() {
+export function DemoVideoButton({ t }: { t: HeroDict["demo"] }) {
   return (
     <Dialog>
       <DialogTrigger
         render={<Button size="xl" variant="ghost" className="text-foreground hover:bg-foreground/10" />}
       >
         <Play data-icon="inline-start" className="fill-current" />
-        Watch the demo
+        {t.button}
       </DialogTrigger>
       <DialogContent
         showCloseButton={false}
         className="w-[min(64rem,calc(100vw-2rem))] max-w-none gap-0 overflow-hidden rounded-2xl p-0 ring-0 sm:max-w-none"
       >
-        <DialogTitle className="sr-only">TORCH demo video</DialogTitle>
+        <DialogTitle className="sr-only">{t.title}</DialogTitle>
         <DialogClose
           render={
             <Button
@@ -84,7 +85,7 @@ export function DemoVideoButton() {
           }
         >
           <X className="size-5" />
-          <span className="sr-only">Close</span>
+          <span className="sr-only">{t.close}</span>
         </DialogClose>
         <WistiaPlayer />
       </DialogContent>
