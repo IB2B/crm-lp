@@ -14,7 +14,7 @@ export type Plan = {
   name: string
   monthly: number | null
   popular?: boolean
-  /** GoHighLevel checkout links. Paste them here; null shows the "To confirm" state. */
+  /** GoHighLevel checkout links. Paste them here; while null, the button opens the booking calendar. */
   checkout: Record<Billing, string | null>
 }
 
@@ -60,9 +60,6 @@ export const yearlyFreeMonths = 2
 
 /** Free trial length shown on the buttons. */
 export const trialDays = 14
-
-/** True once every plan has both checkout links. Hides the "To confirm" badges. */
-export const allCheckoutLinksSet = plans.every((p) => p.checkout.monthly && p.checkout.yearly)
 
 /**
  * The "TORCH price" in the comparison section: the cheapest plan,

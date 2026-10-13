@@ -19,8 +19,7 @@ const en = {
     youBill: "You bill your clients",
     perMonth: "/month",
     perYear: "{amount} a year",
-    partnerPrice: "Your partner price per client is shared on the call",
-    toConfirm: "to confirm",
+    partnerPrice: "Your partner price per client is shared on the call.",
   },
 }
 
@@ -43,8 +42,7 @@ const it: AgenciesDict = {
     youBill: "Fatturi ai tuoi clienti",
     perMonth: "/mese",
     perYear: "{amount} all'anno",
-    partnerPrice: "Il tuo prezzo partner per cliente te lo comunichiamo in chiamata",
-    toConfirm: "da confermare",
+    partnerPrice: "Il tuo prezzo partner per cliente te lo comunichiamo in chiamata.",
   },
 }
 
@@ -65,8 +63,7 @@ const fr: AgenciesDict = {
     youBill: "Vous facturez à vos clients",
     perMonth: "/mois",
     perYear: "{amount} par an",
-    partnerPrice: "Votre prix partenaire par client vous est communiqué lors de l'appel",
-    toConfirm: "à confirmer",
+    partnerPrice: "Votre prix partenaire par client vous est communiqué lors de l'appel.",
   },
 }
 
@@ -87,8 +84,7 @@ const ar: AgenciesDict = {
     youBill: "ما تحصّله من عملائك",
     perMonth: "/شهريًا",
     perYear: "{amount} سنويًا",
-    partnerPrice: "نشاركك سعر الشريك لكل عميل خلال المكالمة",
-    toConfirm: "قيد التأكيد",
+    partnerPrice: "نشاركك سعر الشريك لكل عميل خلال المكالمة.",
   },
 }
 

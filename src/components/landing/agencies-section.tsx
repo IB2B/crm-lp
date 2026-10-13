@@ -93,10 +93,7 @@ function EarningsCalculator({ t }: { t: AgenciesDict["calculator"] }) {
 
       {/* TODO(ib2b): add the partner price per client to show profit. */}
       <p className="mt-6 text-xs text-paper-foreground/60">
-        {t.partnerPrice}{" "}
-        <span className="rounded-full border border-dashed border-paper-foreground/30 px-1.5 py-0.5">
-          {t.toConfirm}
-        </span>
+        {t.partnerPrice}
       </p>
     </div>
   )

@@ -15,7 +15,6 @@ const en = {
   billedYearlyTotal: "{price} + IVA billed yearly",
   billedMonthly: "Billed monthly",
   billedYearly: "Billed yearly",
-  toConfirm: "To confirm",
   startTrial: "Start my {n}-day free trial",
   planIncludes: "This plan includes",
   plans: {
@@ -74,7 +73,6 @@ const en = {
     calendar: "TORCH booking calendar",
     reviews: "TORCH review requests",
   },
-  placeholderNote: "Prices and plan contents are placeholders until confirmed.",
   usageNote: "SMS, call and AI usage may be billed separately.",
 }
 
@@ -93,7 +91,6 @@ const it: PricingDict = {
   billedYearlyTotal: "{price} + IVA fatturati ogni anno",
   billedMonthly: "Fatturato ogni mese",
   billedYearly: "Fatturato ogni anno",
-  toConfirm: "Da confermare",
   startTrial: "Inizia la prova gratuita di {n} giorni",
   planIncludes: "Questo piano include",
   plans: {
@@ -163,7 +160,6 @@ const it: PricingDict = {
     calendar: "Calendario delle prenotazioni di TORCH",
     reviews: "Richieste di recensioni in TORCH",
   },
-  placeholderNote: "Prezzi e contenuti dei piani sono provvisori fino alla conferma.",
   usageNote: "L'uso di SMS, chiamate e AI può essere fatturato a parte.",
 }
 
@@ -180,7 +176,6 @@ const fr: PricingDict = {
   billedYearlyTotal: "{price} + TVA facturés à l'année",
   billedMonthly: "Facturé chaque mois",
   billedYearly: "Facturé chaque année",
-  toConfirm: "À confirmer",
   startTrial: "Commencer mon essai gratuit de {n} jours",
   planIncludes: "Cette formule comprend",
   plans: {
@@ -254,7 +249,6 @@ const fr: PricingDict = {
     calendar: "Calendrier de réservation TORCH",
     reviews: "Demandes d'avis dans TORCH",
   },
-  placeholderNote: "Les prix et le contenu des formules sont provisoires jusqu'à confirmation.",
   usageNote: "L'utilisation des SMS, des appels et de l'IA peut être facturée en plus.",
 }
 
@@ -272,7 +266,6 @@ const ar: PricingDict = {
   billedYearlyTotal: "{price} + ضريبة القيمة المضافة، تُدفع سنويًا",
   billedMonthly: "الدفع شهريًا",
   billedYearly: "الدفع سنويًا",
-  toConfirm: "قيد التأكيد",
   startTrial: "ابدأ تجربتي المجانية لمدة {n} يومًا",
   planIncludes: "تشمل هذه الخطة",
   plans: {
@@ -333,7 +326,6 @@ const ar: PricingDict = {
     calendar: "تقويم الحجوزات في TORCH",
     reviews: "طلبات التقييم في TORCH",
   },
-  placeholderNote: "الأسعار ومحتوى الخطط مؤقتة حتى يتم تأكيدها.",
   usageNote: "قد تُحتسب الرسائل النصية والمكالمات واستخدام الذكاء الاصطناعي بشكل منفصل.",
 }
 

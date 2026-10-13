@@ -21,7 +21,7 @@ export const legalLinks: { label: string; href: string | null }[] = [
 ]
 
 /** Public URL of the site, used for share images and metadata. TODO(ib2b): set the real domain. */
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://crm.intelligentb2b.com"
 
 /** The section also hides itself while src/content/testimonials.ts is empty. */
 export const showTestimonials = true

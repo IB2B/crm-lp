@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils"
 import { fmt, type Locale } from "@/i18n/config"
 import type { PricingDict } from "@/i18n/dictionaries/pricing"
 import {
-  allCheckoutLinksSet,
   euro,
   plans,
   trialDays,
@@ -18,19 +17,6 @@ import {
   type Billing,
 } from "@/content/pricing"
 import { withTracking } from "@/lib/tracking"
-
-function ToConfirm({ label, className }: { label: string; className?: string }) {
-  return (
-    <span
-      className={cn(
-        "rounded-full border border-dashed px-2 py-0.5 text-[11px] font-medium text-muted-foreground",
-        className
-      )}
-    >
-      {label}
-    </span>
-  )
-}
 
 // Real product screens that peek up from the bottom of the panel (same files as the product tour).
 // Alt texts come from the dictionary (screenAlts), keyed the same way.
@@ -267,7 +253,6 @@ export function PricingSection({ t }: { t: PricingDict; lang: Locale }) {
                   ) : (
                     <span>{billing === "monthly" ? t.billedMonthly : t.billedYearly}</span>
                   )}
-                  {allCheckoutLinksSet ? null : <ToConfirm label={t.toConfirm} />}
                 </div>
 
                 <Button
@@ -314,7 +299,6 @@ export function PricingSection({ t }: { t: PricingDict; lang: Locale }) {
         <IncludedInEveryPlan t={t} />
 
         <p className="mt-10 text-center text-sm text-muted-foreground">
-          {allCheckoutLinksSet ? "" : `${t.placeholderNote} `}
           {t.usageNote}
         </p>
       </div>
