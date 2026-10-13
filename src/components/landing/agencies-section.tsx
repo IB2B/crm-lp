@@ -5,8 +5,10 @@ import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { company } from "@/content/site"
+import { fmt, type Locale } from "@/i18n/config"
+import type { AgenciesDict } from "@/i18n/dictionaries/agencies"
 
-const steps = ["Book a call", "We brand it", "You sell, we support"]
+// Text comes from src/i18n/dictionaries/agencies.ts.
 
 const euro = (value: number) => `€${value.toLocaleString("en")}`
 
@@ -50,18 +52,18 @@ function Slider({
   )
 }
 
-function EarningsCalculator() {
+function EarningsCalculator({ t }: { t: AgenciesDict["calculator"] }) {
   const [clients, setClients] = useState(10)
   const [price, setPrice] = useState(197)
   const monthly = clients * price
 
   return (
     <div className="rounded-3xl bg-paper p-6 text-paper-foreground shadow-2xl shadow-black/40 sm:p-8">
-      <p className="text-sm font-semibold tracking-[0.15em] uppercase">Your earnings</p>
+      <p className="text-sm font-semibold tracking-[0.15em] uppercase">{t.title}</p>
 
       <div className="mt-6 space-y-6">
         <Slider
-          label="How many clients?"
+          label={t.clients}
           value={clients}
           display={String(clients)}
           min={1}
@@ -70,7 +72,7 @@ function EarningsCalculator() {
           onChange={setClients}
         />
         <Slider
-          label="What you charge each client / month"
+          label={t.price}
           value={price}
           display={euro(price)}
           min={50}
@@ -81,26 +83,26 @@ function EarningsCalculator() {
       </div>
 
       <div className="mt-8 border-t border-dashed border-paper-foreground/25 pt-6" aria-live="polite">
-        <p className="text-sm text-paper-foreground/70">You bill your clients</p>
+        <p className="text-sm text-paper-foreground/70">{t.youBill}</p>
         <p className="mt-1 text-5xl font-light tracking-tight tabular-nums sm:text-6xl">
           {euro(monthly)}
-          <span className="text-lg text-paper-foreground/60">/month</span>
+          <span className="text-lg text-paper-foreground/60">{t.perMonth}</span>
         </p>
-        <p className="mt-2 text-base font-medium tabular-nums">{euro(monthly * 12)} a year</p>
+        <p className="mt-2 text-base font-medium tabular-nums">{fmt(t.perYear, { amount: euro(monthly * 12) })}</p>
       </div>
 
       {/* TODO(ib2b): add the partner price per client to show profit. */}
       <p className="mt-6 text-xs text-paper-foreground/60">
-        Your partner price per client is shared on the call{" "}
+        {t.partnerPrice}{" "}
         <span className="rounded-full border border-dashed border-paper-foreground/30 px-1.5 py-0.5">
-          to confirm
+          {t.toConfirm}
         </span>
       </p>
     </div>
   )
 }
 
-export function AgenciesSection() {
+export function AgenciesSection({ t }: { t: AgenciesDict; lang: Locale }) {
   return (
     <section
       id="agencies"
@@ -110,12 +112,12 @@ export function AgenciesSection() {
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
-            <p className="text-sm font-medium text-muted-foreground">For agencies</p>
+            <p className="text-sm font-medium text-muted-foreground">{t.eyebrow}</p>
             <h2
               id="agencies-title"
               className="mt-3 text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-5xl"
             >
-              Sell{" "}
+              {t.titleBefore}{" "}
               <span className="relative inline-block text-foreground/35">
                 TORCH
                 <span
@@ -123,18 +125,16 @@ export function AgenciesSection() {
                   className="absolute inset-x-[-4%] top-1/2 h-1 -translate-y-1/2 -rotate-6 rounded-full bg-brand"
                 />
               </span>{" "}
-              your own CRM.
+              {t.titleAfter}
             </h2>
             <p className="mt-5 max-w-lg text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg">
-              Give your clients a complete CRM with your logo and your prices.
-              You keep the clients and the monthly revenue. We do the setup and
-              support behind the scenes.
+              {t.intro}
             </p>
 
             <ul className="mt-8 flex flex-wrap gap-2 text-sm">
-              {["Your logo", "Your domain", "Your prices", "Your clients"].map((t) => (
-                <li key={t} className="rounded-full border border-foreground/15 px-3 py-1 text-foreground/80">
-                  {t}
+              {t.perks.map((perk) => (
+                <li key={perk} className="rounded-full border border-foreground/15 px-3 py-1 text-foreground/80">
+                  {perk}
                 </li>
               ))}
             </ul>
@@ -142,24 +142,24 @@ export function AgenciesSection() {
             <Button
               size="xl"
               nativeButton={false}
-              render={<a href={`mailto:${company.salesEmail}?subject=Become%20a%20TORCH%20partner`} />}
+              render={<a href={`mailto:${company.salesEmail}?subject=${encodeURIComponent(t.emailSubject)}`} />}
               className="mt-10 w-full sm:w-auto"
             >
-              Become a partner
-              <ArrowRight data-icon="inline-end" />
+              {t.cta}
+              <ArrowRight data-icon="inline-end" className="rtl:-scale-x-100" />
             </Button>
 
             <ol className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
-              {steps.map((step, i) => (
+              {t.steps.map((step, i) => (
                 <li key={step} className="flex items-center gap-2">
-                  {i > 0 ? <ArrowRight className="size-3.5" aria-hidden="true" /> : null}
+                  {i > 0 ? <ArrowRight className="size-3.5 rtl:-scale-x-100" aria-hidden="true" /> : null}
                   {step}
                 </li>
               ))}
             </ol>
           </div>
 
-          <EarningsCalculator />
+          <EarningsCalculator t={t.calculator} />
         </div>
 
       </div>

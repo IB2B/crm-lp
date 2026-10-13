@@ -2,170 +2,169 @@
 
 import { useEffect, useRef, useState } from "react"
 import {
+  BarChart3,
   Bot,
+  CalendarCog,
   CalendarDays,
   Globe,
   KanbanSquare,
   Megaphone,
   MessageSquare,
+  PhoneCall,
   Share2,
   Star,
+  Workflow,
   Zap,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { ScreenshotShowcase } from "@/components/landing/inside-torch/screenshot-showcase"
+import type { Locale } from "@/i18n/config"
+import type { InsideTorchDict } from "@/i18n/dictionaries/insideTorch"
 
 // Every tab shows a real TORCH screenshot.
+// Text (label, caption, benefit, alt) comes from src/i18n/dictionaries/insideTorch.ts, in the same order.
 type Item = {
   value: string
-  label: string
   icon: typeof Star
-  caption: string
-  /** What it means for the owner, in plain words. */
-  benefit: string
-  showcase: { src: string; width: number; height: number; alt: string }
+  showcase: { src: string; width: number; height: number }
 }
 
 const items: Item[] = [
   {
     value: "inbox",
-    label: "Inbox",
     icon: MessageSquare,
-    caption: "WhatsApp, Instagram, Facebook, texts and email in one inbox.",
-    benefit: "No more jumping between apps. Your whole team sees every message, so nobody gets left without a reply.",
     // PREVIEW: real account screenshot; personal data replaced with grey placeholder bars.
     // TODO(ib2b): replace with a demo sub-account screenshot (TORCH logo, fake contacts).
     showcase: {
-      src: "/platform/inbox.webp?v=4",
+      src: "/platform/inbox.webp?v=5",
       width: 1470,
       height: 827,
-      alt: "TORCH conversations inbox with a team inbox list, an open conversation and contact details",
     },
   },
   {
     value: "pipeline",
-    label: "Pipeline",
     icon: KanbanSquare,
-    caption: "See every customer and where they are, from first message to paid.",
-    benefit: "Know who's ready to buy, who needs a nudge and who's waiting on you.",
     // Real screenshot, lead names, phones and companies replaced with placeholder bars.
     showcase: {
-      src: "/platform/pipeline.webp?v=1",
+      src: "/platform/pipeline.webp?v=2",
       width: 1468,
       height: 828,
-      alt: "TORCH pipeline board with lead cards organised by stage",
     },
   },
   {
     value: "marketing",
-    label: "Marketing campaigns",
     icon: Megaphone,
-    caption: "Send offers and news by email, SMS and WhatsApp, and see who opens and clicks.",
-    benefit: "Bring past customers back with a quick message, without hiring an agency.",
     // Real screenshot (sample data, banner removed).
     // TODO(ib2b): retake from the demo sub-account with the TORCH logo.
     showcase: {
-      src: "/platform/marketing.webp?v=3",
+      src: "/platform/marketing.webp?v=4",
       width: 1471,
       height: 826,
-      alt: "TORCH email marketing statistics showing delivered, opened, clicked and ordered",
+    },
+  },
+  {
+    value: "campaign-results",
+    icon: BarChart3,
+    // Real screenshot of one campaign's report; workspace and campaign names replaced.
+    showcase: {
+      src: "/platform/campaign-results.webp?v=1",
+      width: 1468,
+      height: 827,
     },
   },
   {
     value: "social",
-    label: "Social media planner",
     icon: Share2,
-    caption: "Connect Facebook, Instagram, TikTok, LinkedIn, Google and more, then post everywhere at once.",
-    benefit: "Plan a week of posts in one sitting and let TORCH publish them on time.",
     // Real screenshot. TODO(ib2b): retake with the TORCH logo.
     showcase: {
-      src: "/platform/social.webp?v=3",
+      src: "/platform/social.webp?v=4",
       width: 1472,
       height: 827,
-      alt: "TORCH social planner showing Facebook, Instagram, LinkedIn, TikTok, YouTube, Pinterest, Threads, Bluesky and Google Business",
     },
   },
   {
     value: "ai-agent",
-    label: "AI assistant",
     icon: Bot,
-    caption: "Create AI agents that answer your customers and book visits, day and night.",
-    benefit: "Customers get an answer at 11pm on a Sunday, and you wake up to bookings.",
-    // Real screenshot.
+    // Real screenshot, workspace and test agent names replaced.
     showcase: {
-      src: "/platform/ai-agents.webp?v=3",
-      width: 1474,
-      height: 830,
-      alt: "TORCH Conversation AI agents dashboard",
+      src: "/platform/ai-agents.webp?v=5",
+      width: 1469,
+      height: 827,
+    },
+  },
+  {
+    value: "voice-ai",
+    icon: PhoneCall,
+    // Real screenshot, workspace and test agent names replaced.
+    showcase: {
+      src: "/platform/voice-ai.webp?v=1",
+      width: 1469,
+      height: 828,
     },
   },
   {
     value: "calendar",
-    label: "Booking & reminders",
     icon: CalendarDays,
-    caption: "Every booking in one calendar, with reminders sent for you.",
-    benefit: "Fewer no-shows, because everyone gets a reminder before their visit.",
-    // Real screenshot, team names replaced with placeholder bars.
+    // Real screenshot, team names replaced with placeholder bars; sample bookings drawn in.
     showcase: {
-      src: "/platform/calendar.webp?v=4",
+      src: "/platform/calendar.webp?v=6",
       width: 1473,
       height: 828,
-      alt: "TORCH calendar week view with team filters",
+    },
+  },
+  {
+    value: "calendars",
+    icon: CalendarCog,
+    // Real screenshot, workspace and calendar names replaced.
+    showcase: {
+      src: "/platform/calendars.webp?v=1",
+      width: 1471,
+      height: 828,
     },
   },
   {
     value: "sites",
-    label: "Websites & funnels",
     icon: Globe,
-    caption: "Start from ready-made templates for your business. We set up your pages for you.",
-    benefit: "A page that looks good on phones and sends every enquiry straight to your inbox.",
     // Real screenshot (template library). TODO(ib2b): retake with the TORCH logo.
     showcase: {
       src: "/platform/sites.webp?v=3",
       width: 1268,
       height: 777,
-      alt: "TORCH funnel template library with ready-made templates by industry",
     },
   },
   {
     value: "reviews",
-    label: "Reviews",
     icon: Star,
-    caption: "See your rating and every new review, and send review requests in one click.",
-    benefit: "More happy customers leave a review, because you ask at the right moment.",
     // Real screenshot, account name replaced with placeholder bars. TODO(ib2b): retake from the demo sub-account.
     showcase: {
-      src: "/platform/reviews.webp?v=4",
+      src: "/platform/reviews.webp?v=5",
       width: 1469,
       height: 826,
-      alt: "TORCH reputation overview with average rating, total reviews and charts",
     },
   },
   {
     value: "automations",
-    label: "Automations",
     icon: Zap,
-    caption: "Ready-made workflows for bookings, follow-ups and campaigns. We build them for you.",
-    benefit: "The follow-ups you never have time for happen on their own.",
     // Real screenshot, client names replaced with placeholder bars. TODO(ib2b): retake from the demo sub-account.
     showcase: {
-      src: "/platform/automations.webp?v=4",
+      src: "/platform/automations.webp?v=5",
       width: 1468,
       height: 823,
-      alt: "TORCH list of automation workflows with their status and number of contacts",
+    },
+  },  {
+    value: "workflow",
+    icon: Workflow,
+    // Real screenshot, workflow name and form IDs replaced, warning dots removed.
+    showcase: {
+      src: "/platform/workflow.webp?v=1",
+      width: 1473,
+      height: 829,
     },
   },
 ]
 
-// Shown as one line so the list stays short.
-const alsoIncluded = [
-  "payments & invoices",
-  "a mobile app",
-  "reports",
-]
-
-export function InsideTorchSection() {
+export function InsideTorchSection({ t }: { t: InsideTorchDict; lang: Locale }) {
   // Scroll story: the feature in the middle of the screen is "active" and the sticky screen follows it.
   const [active, setActive] = useState(0)
   const stepRefs = useRef<(HTMLLIElement | null)[]>([])
@@ -187,16 +186,15 @@ export function InsideTorchSection() {
     <section id="features" aria-labelledby="inside-title" className="scroll-mt-16 overflow-x-clip py-20 lg:py-28">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="max-w-2xl">
-          <p className="text-sm font-medium text-muted-foreground">Inside TORCH</p>
+          <p className="text-sm font-medium text-muted-foreground">{t.eyebrow}</p>
           <h2
             id="inside-title"
             className="mt-3 text-4xl leading-[1.05] font-light tracking-tight text-balance sm:text-5xl"
           >
-            Everything you need, <span className="text-foreground/45">in one app.</span>
+            {t.titleLead} <span className="text-foreground/45">{t.titleRest}</span>
           </h2>
           <p className="mt-5 text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg">
-            All your tools work together, on your computer and your phone.
-            We set them all up before you log in for the first time.
+            {t.intro}
           </p>
         </div>
 
@@ -211,6 +209,8 @@ export function InsideTorchSection() {
             </span>
             {items.map((item, i) => {
               const Icon = item.icon
+              const text = t.items[i]
+              const shot = { ...item.showcase, alt: text.alt, enlargeLabel: t.enlarge, closeLabel: t.close }
               const isActive = i === active
               return (
                 <li
@@ -242,19 +242,19 @@ export function InsideTorchSection() {
                       <Icon className="size-4 text-brand" aria-hidden="true" />
                       <span className="tabular-nums">{String(i + 1).padStart(2, "0")}</span>
                       <span aria-hidden="true">·</span>
-                      {item.label}
+                      {text.label}
                     </p>
                     <p className="mt-4 text-2xl leading-snug font-light tracking-tight text-balance sm:text-3xl lg:text-2xl xl:text-3xl">
-                      {item.caption}
+                      {text.caption}
                     </p>
                     <p className="mt-4 text-base leading-relaxed text-pretty text-muted-foreground">
-                      {item.benefit}
+                      {text.benefit}
                     </p>
                   </div>
                   <div className="mt-6 lg:hidden">
                     <div className="rounded-[22px] bg-paper p-3">
                       <div className="aspect-[16/9]">
-                        <ScreenshotShowcase {...item.showcase} />
+                        <ScreenshotShowcase {...shot} />
                       </div>
                     </div>
                   </div>
@@ -276,11 +276,16 @@ export function InsideTorchSection() {
                       aria-hidden={i !== active}
                       inert={i !== active}
                       className={cn(
-                        "absolute inset-0 origin-top-left transition-[opacity,translate,scale] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+                        "absolute inset-0 origin-top-left rtl:origin-top-right transition-[opacity,translate,scale] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
                         i === active ? "translate-y-0 scale-100 opacity-100" : "translate-y-4 scale-[0.97] opacity-0"
                       )}
                     >
-                      <ScreenshotShowcase {...item.showcase} />
+                      <ScreenshotShowcase
+                        {...item.showcase}
+                        alt={t.items[i].alt}
+                        enlargeLabel={t.enlarge}
+                        closeLabel={t.close}
+                      />
                     </div>
                   ))}
                 </div>
@@ -291,7 +296,7 @@ export function InsideTorchSection() {
                 </span>
                 <span className="h-px flex-1 bg-border">
                   <span
-                    className="block h-full origin-left bg-brand transition-transform duration-500 motion-reduce:transition-none"
+                    className="block h-full origin-left rtl:origin-right bg-brand transition-transform duration-500 motion-reduce:transition-none"
                     style={{ transform: `scaleX(${(active + 1) / items.length})` }}
                   />
                 </span>
@@ -301,7 +306,7 @@ export function InsideTorchSection() {
         </div>
 
         <p className="mt-10 text-sm text-muted-foreground">
-          Also included: {alsoIncluded.join(", ")}.
+          {t.alsoIncluded}
         </p>
       </div>
     </section>

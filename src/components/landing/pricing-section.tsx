@@ -7,10 +7,11 @@ import { ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { bookingCalendarSrc } from "@/content/embeds"
 import { cn } from "@/lib/utils"
+import { fmt, type Locale } from "@/i18n/config"
+import type { PricingDict } from "@/i18n/dictionaries/pricing"
 import {
   allCheckoutLinksSet,
   euro,
-  includedInEveryPlan,
   plans,
   trialDays,
   yearlyFreeMonths,
@@ -18,7 +19,7 @@ import {
 } from "@/content/pricing"
 import { withTracking } from "@/lib/tracking"
 
-function ToConfirm({ className }: { className?: string }) {
+function ToConfirm({ label, className }: { label: string; className?: string }) {
   return (
     <span
       className={cn(
@@ -26,17 +27,18 @@ function ToConfirm({ className }: { className?: string }) {
         className
       )}
     >
-      To confirm
+      {label}
     </span>
   )
 }
 
 // Real product screens that peek up from the bottom of the panel (same files as the product tour).
+// Alt texts come from the dictionary (screenAlts), keyed the same way.
 const peekScreens = [
-  { src: "/platform/inbox.webp", alt: "TORCH inbox with WhatsApp, SMS and email conversations" },
-  { src: "/platform/calendar.webp", alt: "TORCH booking calendar" },
-  { src: "/platform/reviews.webp", alt: "TORCH review requests" },
-]
+  { key: "inbox", src: "/platform/inbox.webp" },
+  { key: "calendar", src: "/platform/calendar.webp" },
+  { key: "reviews", src: "/platform/reviews.webp" },
+] as const
 
 // Everything shared, in one warm charcoal panel (same colour as the Starter card):
 // a light headline, four plain groups, and a strip of real product screens along the bottom.
@@ -45,7 +47,7 @@ const peekScreens = [
 // Without JavaScript or with reduced motion everything simply shows in place.
 const ease = "ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
 
-function IncludedInEveryPlan() {
+function IncludedInEveryPlan({ t }: { t: PricingDict }) {
   const ref = useRef<HTMLDivElement>(null)
   // null = not measured yet (render in place), false = waiting below the fold, true = playing
   const [shown, setShown] = useState<boolean | null>(null)
@@ -72,8 +74,8 @@ function IncludedInEveryPlan() {
       <div className="px-6 pt-12 sm:px-10 lg:px-14 lg:pt-16">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
           <h3 className="text-4xl font-light tracking-tight sm:text-5xl">
-            {["Every plan comes", "with"].map((line, i) => (
-              <span key={line} className="block overflow-hidden pb-1">
+            {t.includedTitleLines.map((line, i) => (
+              <span key={i} className="block overflow-hidden pb-1">
                 <span
                   className={cn("block transition-transform duration-1000", ease, hidden && "translate-y-full")}
                   style={delay(i * 120)}
@@ -83,18 +85,18 @@ function IncludedInEveryPlan() {
                     <>
                       {" "}
                       <span className="relative text-brand">
-                        everything
+                        {t.includedTitleEmphasis}
                         <span
                           aria-hidden="true"
                           className={cn(
-                            "absolute inset-x-0 -bottom-0.5 h-0.5 origin-left rounded-full bg-brand transition-transform duration-700",
+                            "absolute inset-x-0 -bottom-0.5 h-0.5 origin-left rounded-full rtl:origin-right bg-brand transition-transform duration-700",
                             ease,
                             hidden ? "scale-x-0" : "scale-x-100"
                           )}
                           style={delay(700)}
                         />
                       </span>
-                      .
+                      {t.includedTitleEnd}
                     </>
                   ) : null}
                 </span>
@@ -109,18 +111,18 @@ function IncludedInEveryPlan() {
             )}
             style={delay(300)}
           >
-            All the tools are in every plan. Plans only differ by locations and how much our team does for you.
+            {t.includedIntro}
           </p>
         </div>
 
         <div
           aria-hidden="true"
-          className={cn("mt-12 h-px origin-left bg-border transition-transform duration-1000", ease, hidden && "scale-x-0")}
+          className={cn("mt-12 h-px origin-left bg-border rtl:origin-right transition-transform duration-1000", ease, hidden && "scale-x-0")}
           style={delay(400)}
         />
 
         <div className="grid gap-x-10 gap-y-10 pt-10 sm:grid-cols-2 lg:grid-cols-4">
-          {includedInEveryPlan.map(({ group, items }, col) => (
+          {t.includedGroups.map(({ group, items }, col) => (
             <div
               key={group}
               className={cn("transition-[opacity,translate] duration-700", ease, hidden && "translate-y-4 opacity-0")}
@@ -139,7 +141,7 @@ function IncludedInEveryPlan() {
 
       {/* pt-3 leaves room for the hover lift inside the cropped strip */}
       <div className="mt-11 grid h-27 grid-cols-2 items-start gap-4 overflow-hidden px-6 pt-3 sm:h-31 sm:grid-cols-3 sm:px-10 lg:h-43 lg:px-14">
-        {peekScreens.map(({ src, alt }, i) => (
+        {peekScreens.map(({ key, src }, i) => (
           <div
             key={src}
             className={cn(
@@ -154,7 +156,7 @@ function IncludedInEveryPlan() {
             <div className="overflow-hidden rounded-t-xl border border-b-0 bg-card shadow-2xl shadow-black/40 transition-transform duration-300 ease-out hover:-translate-y-3 motion-reduce:transition-none">
               <Image
                 src={src}
-                alt={alt}
+                alt={t.screenAlts[key]}
                 width={1470}
                 height={827}
                 sizes="(min-width: 1024px) 360px, (min-width: 640px) 33vw, 50vw"
@@ -168,7 +170,8 @@ function IncludedInEveryPlan() {
   )
 }
 
-export function PricingSection() {
+// Text comes from src/i18n/dictionaries/pricing.ts; numbers and links from src/content/pricing.ts.
+export function PricingSection({ t }: { t: PricingDict; lang: Locale }) {
   const [billing, setBilling] = useState<Billing>("monthly")
 
   const perMonth = (monthly: number | null) =>
@@ -183,21 +186,21 @@ export function PricingSection() {
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
-            <p className="text-sm font-medium text-muted-foreground">Pricing</p>
+            <p className="text-sm font-medium text-muted-foreground">{t.eyebrow}</p>
             <h2
               id="pricing-title"
               className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
             >
-              Simple plans. Setup included.
+              {t.title}
             </h2>
             <p className="mt-4 text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg">
-              No contracts. Cancel anytime. Every plan is set up for you by our team.
+              {t.intro}
             </p>
           </div>
 
           <div
             role="radiogroup"
-            aria-label="Billing period"
+            aria-label={t.billingLabel}
             className="inline-flex rounded-full border bg-background p-1"
           >
             {(["monthly", "yearly"] as const).map((b) => (
@@ -212,7 +215,7 @@ export function PricingSection() {
                   billing === b ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                {b === "monthly" ? "Monthly" : "Yearly"}
+                {b === "monthly" ? t.monthly : t.yearly}
                 {b === "yearly" ? (
                   <span
                     className={cn(
@@ -220,7 +223,7 @@ export function PricingSection() {
                       billing === b ? "bg-brand text-brand-foreground" : "bg-brand/15 text-foreground"
                     )}
                   >
-                    {yearlyFreeMonths} months free
+                    {fmt(t.monthsFree, { n: yearlyFreeMonths })}
                   </span>
                 ) : null}
               </button>
@@ -228,10 +231,11 @@ export function PricingSection() {
           </div>
         </div>
 
-        <div className="mt-12 grid items-stretch gap-6 lg:mt-16 lg:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 items-stretch gap-6 lg:mt-16 lg:grid-cols-3">
           {plans.map((plan) => {
             const price = perMonth(plan.monthly)
             const link = plan.checkout[billing]
+            const text = t.plans[plan.id]
             return (
               <div
                 key={plan.id}
@@ -244,26 +248,26 @@ export function PricingSection() {
               >
                 {plan.popular ? (
                   <span className="absolute -top-4 end-6 rotate-6 rounded-xl bg-brand px-3 py-1.5 text-xs font-bold tracking-wide text-brand-foreground uppercase shadow-lg">
-                    Most popular
+                    {t.mostPopular}
                   </span>
                 ) : null}
 
                 <h3 className="text-xl font-medium">{plan.name}</h3>
-                <p className="mt-1 text-sm text-muted-foreground lg:min-h-10">{plan.tagline}</p>
+                <p className="mt-1 text-sm text-muted-foreground lg:min-h-10">{text.tagline}</p>
 
                 <p className="mt-8 flex items-baseline gap-1">
                   <span className="text-5xl font-light tracking-tight tabular-nums">{euro(price)}</span>
-                  <span className="text-muted-foreground">/month + IVA</span>
+                  <span className="text-muted-foreground">{t.perMonth}</span>
                 </p>
                 <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                   {billing === "yearly" && plan.monthly !== null ? (
                     <span className="tabular-nums">
-                      {euro(plan.monthly * (12 - yearlyFreeMonths))} + IVA billed yearly
+                      {fmt(t.billedYearlyTotal, { price: euro(plan.monthly * (12 - yearlyFreeMonths)) })}
                     </span>
                   ) : (
-                    <span>{billing === "monthly" ? "Billed monthly" : "Billed yearly"}</span>
+                    <span>{billing === "monthly" ? t.billedMonthly : t.billedYearly}</span>
                   )}
-                  {allCheckoutLinksSet ? null : <ToConfirm />}
+                  {allCheckoutLinksSet ? null : <ToConfirm label={t.toConfirm} />}
                 </div>
 
                 <Button
@@ -284,16 +288,17 @@ export function PricingSection() {
                       }}
                     />
                   }
-                  className="mt-8 w-full"
+                  // Longer translations (e.g. French) wrap onto two lines instead of widening the card.
+                  className="mt-8 h-auto min-h-12 w-full py-3 text-center whitespace-normal"
                 >
-                  Start my {trialDays}-day free trial
-                  <ArrowRight data-icon="inline-end" />
+                  {fmt(t.startTrial, { n: trialDays })}
+                  <ArrowRight data-icon="inline-end" className="rtl:-scale-x-100" />
                 </Button>
 
                 <div className="mt-8 border-t pt-6">
-                  <p className="text-sm font-medium">This plan includes</p>
+                  <p className="text-sm font-medium">{t.planIncludes}</p>
                   <ul className="mt-4 space-y-3 text-sm">
-                    {plan.highlights.map((f) => (
+                    {text.highlights.map((f) => (
                       <li key={f} className="flex items-start gap-2.5">
                         <Check className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
                         {f}
@@ -306,11 +311,11 @@ export function PricingSection() {
           })}
         </div>
 
-        <IncludedInEveryPlan />
+        <IncludedInEveryPlan t={t} />
 
         <p className="mt-10 text-center text-sm text-muted-foreground">
-          {allCheckoutLinksSet ? "" : "Prices and plan contents are placeholders until confirmed. "}
-          SMS, call and AI usage may be billed separately.
+          {allCheckoutLinksSet ? "" : `${t.placeholderNote} `}
+          {t.usageNote}
         </p>
       </div>
     </section>

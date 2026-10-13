@@ -1,8 +1,11 @@
 import { cn } from "@/lib/utils"
 
 import { testimonials, type Testimonial } from "@/content/testimonials"
+import type { Locale } from "@/i18n/config"
+import type { TestimonialsDict } from "@/i18n/dictionaries/testimonials"
 
-// Real quotes only (see src/content/testimonials.ts). First one is featured, the rest slide.
+// Real quotes only (see src/content/testimonials.ts), never translated; labels come from
+// src/i18n/dictionaries/testimonials.ts. First one is featured, the rest slide.
 const [featured, ...short] = testimonials
 const half = Math.ceil(short.length / 2)
 const rowA = short.slice(0, half)
@@ -23,7 +26,8 @@ function Avatar({ name }: { name: string }) {
 // One row of quotes, duplicated so the loop is seamless.
 function MarqueeRow({ items, reverse }: { items: Testimonial[]; reverse?: boolean }) {
   return (
-    <div className="group flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+    // dir="ltr" keeps the sliding track moving the same way in Arabic.
+    <div dir="ltr" className="group flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
       <ul
         className={cn(
           "flex shrink-0 group-hover:[animation-play-state:paused] motion-reduce:animate-none",
@@ -50,7 +54,7 @@ function MarqueeRow({ items, reverse }: { items: Testimonial[]; reverse?: boolea
   )
 }
 
-export function TestimonialsSection() {
+export function TestimonialsSection({ t }: { t: TestimonialsDict; lang: Locale }) {
   if (!featured) return null
 
   return (
@@ -58,12 +62,12 @@ export function TestimonialsSection() {
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Testimonials</p>
+            <p className="text-sm font-medium text-muted-foreground">{t.eyebrow}</p>
             <h2
               id="testimonials-title"
               className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
             >
-              What our clients say.
+              {t.title}
             </h2>
           </div>
         </div>
@@ -75,7 +79,7 @@ export function TestimonialsSection() {
           >
             &ldquo;
           </span>
-          <blockquote className="mt-2 max-w-4xl text-2xl leading-snug font-light tracking-tight text-balance sm:text-4xl">
+          <blockquote dir="auto" className="mt-2 max-w-4xl text-2xl leading-snug font-light tracking-tight text-balance sm:text-4xl">
             {featured.quote}
           </blockquote>
           <figcaption className="mt-8 flex items-center gap-3">
@@ -89,7 +93,7 @@ export function TestimonialsSection() {
       </div>
 
       {short.length ? (
-      <div className="mt-16 space-y-4" aria-label="More client quotes">
+      <div className="mt-16 space-y-4" aria-label={t.moreQuotes}>
         {rowA.length ? <MarqueeRow items={rowA} /> : null}
         {rowB.length ? <MarqueeRow items={rowB} reverse /> : null}
       </div>
