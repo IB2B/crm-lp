@@ -101,9 +101,6 @@ export function ComparisonSection({ t }: { t: ComparisonDict; lang: Locale }) {
               <span className="text-6xl font-light tracking-tight tabular-nums">{euro(torchPrice)}</span>
               <span className="text-lg text-muted-foreground">{t.perMonthVat}</span>
             </p>
-            <p className="mt-2 inline-block rounded-full border border-dashed border-foreground/20 px-2.5 py-0.5 text-[11px] text-muted-foreground">
-              {t.priceToConfirm}
-            </p>
 
             <p className="mt-6 text-lg">
               {t.everythingLead}{" "}

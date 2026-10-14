@@ -4,7 +4,7 @@ import { useId, useState } from "react"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { company } from "@/content/site"
+import { bookingHref } from "@/content/embeds"
 import { fmt, type Locale } from "@/i18n/config"
 import type { AgenciesDict } from "@/i18n/dictionaries/agencies"
 
@@ -93,16 +93,13 @@ function EarningsCalculator({ t }: { t: AgenciesDict["calculator"] }) {
 
       {/* TODO(ib2b): add the partner price per client to show profit. */}
       <p className="mt-6 text-xs text-paper-foreground/60">
-        {t.partnerPrice}{" "}
-        <span className="rounded-full border border-dashed border-paper-foreground/30 px-1.5 py-0.5">
-          {t.toConfirm}
-        </span>
+        {t.partnerPrice}
       </p>
     </div>
   )
 }
 
-export function AgenciesSection({ t }: { t: AgenciesDict; lang: Locale }) {
+export function AgenciesSection({ t, lang }: { t: AgenciesDict; lang: Locale }) {
   return (
     <section
       id="agencies"
@@ -142,7 +139,7 @@ export function AgenciesSection({ t }: { t: AgenciesDict; lang: Locale }) {
             <Button
               size="xl"
               nativeButton={false}
-              render={<a href={`mailto:${company.salesEmail}?subject=${encodeURIComponent(t.emailSubject)}`} />}
+              render={<a href={bookingHref(lang, "agency")} />}
               className="mt-10 w-full sm:w-auto"
             >
               {t.cta}

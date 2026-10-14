@@ -44,6 +44,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
     },
     openGraph: {
       type: "website",
+      url: `/${lang}`,
       siteName: "TORCH by Intelligent B2B",
       locale: ogLocale[lang],
       title,

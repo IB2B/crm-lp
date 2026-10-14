@@ -11,12 +11,12 @@ const en = {
   yearly: "Yearly",
   monthsFree: "{n} months free",
   mostPopular: "Most popular",
-  perMonth: "/month + IVA",
-  billedYearlyTotal: "{price} + IVA billed yearly",
+  perMonth: "/month",
+  billedYearlyTotal: "{price} billed yearly",
   billedMonthly: "Billed monthly",
   billedYearly: "Billed yearly",
-  toConfirm: "To confirm",
   startTrial: "Start my {n}-day free trial",
+  partnerCall: "Book a partner call",
   planIncludes: "This plan includes",
   plans: {
     starter: {
@@ -74,7 +74,6 @@ const en = {
     calendar: "TORCH booking calendar",
     reviews: "TORCH review requests",
   },
-  placeholderNote: "Prices and plan contents are placeholders until confirmed.",
   usageNote: "SMS, call and AI usage may be billed separately.",
 }
 
@@ -89,12 +88,12 @@ const it: PricingDict = {
   yearly: "Annuale",
   monthsFree: "{n} mesi gratis",
   mostPopular: "Il più scelto",
-  perMonth: "/mese + IVA",
-  billedYearlyTotal: "{price} + IVA fatturati ogni anno",
+  perMonth: "/mese",
+  billedYearlyTotal: "{price} fatturati ogni anno",
   billedMonthly: "Fatturato ogni mese",
   billedYearly: "Fatturato ogni anno",
-  toConfirm: "Da confermare",
   startTrial: "Inizia la prova gratuita di {n} giorni",
+  partnerCall: "Prenota una chiamata partner",
   planIncludes: "Questo piano include",
   plans: {
     starter: {
@@ -163,7 +162,6 @@ const it: PricingDict = {
     calendar: "Calendario delle prenotazioni di TORCH",
     reviews: "Richieste di recensioni in TORCH",
   },
-  placeholderNote: "Prezzi e contenuti dei piani sono provvisori fino alla conferma.",
   usageNote: "L'uso di SMS, chiamate e AI può essere fatturato a parte.",
 }
 
@@ -176,12 +174,12 @@ const fr: PricingDict = {
   yearly: "Annuel",
   monthsFree: "{n} mois offerts",
   mostPopular: "Le plus choisi",
-  perMonth: "/mois + TVA",
-  billedYearlyTotal: "{price} + TVA facturés à l'année",
+  perMonth: "/mois",
+  billedYearlyTotal: "{price} facturés à l'année",
   billedMonthly: "Facturé chaque mois",
   billedYearly: "Facturé chaque année",
-  toConfirm: "À confirmer",
   startTrial: "Commencer mon essai gratuit de {n} jours",
+  partnerCall: "Réserver un appel partenaire",
   planIncludes: "Cette formule comprend",
   plans: {
     starter: {
@@ -254,7 +252,6 @@ const fr: PricingDict = {
     calendar: "Calendrier de réservation TORCH",
     reviews: "Demandes d'avis dans TORCH",
   },
-  placeholderNote: "Les prix et le contenu des formules sont provisoires jusqu'à confirmation.",
   usageNote: "L'utilisation des SMS, des appels et de l'IA peut être facturée en plus.",
 }
 
@@ -268,12 +265,12 @@ const ar: PricingDict = {
   // Arabic counts two as a dual ("شهران"), so no {n} here. Update it if yearlyFreeMonths changes.
   monthsFree: "شهران مجانًا",
   mostPopular: "الأكثر اختيارًا",
-  perMonth: "/شهريًا + ضريبة القيمة المضافة",
-  billedYearlyTotal: "{price} + ضريبة القيمة المضافة، تُدفع سنويًا",
+  perMonth: "/شهريًا",
+  billedYearlyTotal: "{price}، تُدفع سنويًا",
   billedMonthly: "الدفع شهريًا",
   billedYearly: "الدفع سنويًا",
-  toConfirm: "قيد التأكيد",
   startTrial: "ابدأ تجربتي المجانية لمدة {n} يومًا",
+  partnerCall: "احجز مكالمة شراكة",
   planIncludes: "تشمل هذه الخطة",
   plans: {
     starter: {
@@ -333,7 +330,6 @@ const ar: PricingDict = {
     calendar: "تقويم الحجوزات في TORCH",
     reviews: "طلبات التقييم في TORCH",
   },
-  placeholderNote: "الأسعار ومحتوى الخطط مؤقتة حتى يتم تأكيدها.",
   usageNote: "قد تُحتسب الرسائل النصية والمكالمات واستخدام الذكاء الاصطناعي بشكل منفصل.",
 }
 

@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react"
 
 import { CookieSettingsButton } from "@/components/cookie-banner"
 import { NewsletterForm } from "@/components/landing/newsletter-form"
-import { bookingCalendarSrc, phoneLink, whatsappLink } from "@/content/embeds"
+import { bookingHref, phoneLink, whatsappLink } from "@/content/embeds"
 import { company, legalLinks, socialLinks } from "@/content/site"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { fmt, localeNames, localizeHref, type Locale } from "@/i18n/config"
@@ -11,7 +11,7 @@ import type { ChromeDict } from "@/i18n/dictionaries/chrome"
 import { newsletterEnabled } from "@/lib/newsletter"
 
 // Hrefs live here; labels come from src/i18n/dictionaries/chrome.ts (footer.columns).
-function footerColumns(c: ChromeDict["footer"]["columns"]) {
+function footerColumns(c: ChromeDict["footer"]["columns"], lang: Locale) {
   return [
     {
       title: c.product.title,
@@ -26,7 +26,7 @@ function footerColumns(c: ChromeDict["footer"]["columns"]) {
       title: c.company.title,
       links: [
         { href: "#agencies", label: c.company.agencies },
-        { href: bookingCalendarSrc, label: c.company.bookCall },
+        { href: bookingHref(lang), label: c.company.bookCall },
         { href: "#faq", label: c.company.faq },
       ],
     },
@@ -36,7 +36,7 @@ function footerColumns(c: ChromeDict["footer"]["columns"]) {
         { href: whatsappLink, label: c.support.whatsapp },
         { href: phoneLink, label: c.support.callUs },
         { href: `mailto:${company.email}`, label: c.support.emailUs },
-        { href: bookingCalendarSrc, label: c.support.videoCall },
+        { href: bookingHref(lang), label: c.support.videoCall },
       ],
     },
   ]
@@ -60,7 +60,7 @@ const linkClass =
 export function SiteFooter({ t, lang }: { t: ChromeDict; lang: Locale }) {
   const year = new Date().getFullYear()
   const f = t.footer
-  const columns = footerColumns(f.columns)
+  const columns = footerColumns(f.columns, lang)
   const languageParts = new Intl.ListFormat(lang, { type: "conjunction" }).formatToParts(
     supportLocales.map((l) => localeNames[l])
   )

@@ -1,18 +1,18 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { bookingCalendarSrc, phoneDisplay, phoneLink, whatsappLink } from "@/content/embeds"
+import { bookingHref, phoneDisplay, phoneLink, whatsappLink } from "@/content/embeds"
 import { trialDays } from "@/content/pricing"
 import { company } from "@/content/site"
 import { fmt, type Locale } from "@/i18n/config"
 import type { FinalCtaDict } from "@/i18n/dictionaries/finalCta"
 
 // Text comes from src/i18n/dictionaries/finalCta.ts.
-export function FinalCtaSection({ t }: { t: FinalCtaDict; lang: Locale }) {
+export function FinalCtaSection({ t, lang }: { t: FinalCtaDict; lang: Locale }) {
   // Ways to reach a person (links live in src/content/embeds.ts and site.ts).
   // `value` (phone number, email) is shown left to right, even on Arabic pages.
   const contactRows: { label: string; value?: string | null; href: string }[] = [
-    { label: t.bookCall, href: bookingCalendarSrc },
+    { label: t.bookCall, href: bookingHref(lang) },
     { label: t.whatsapp, href: whatsappLink },
     { label: t.callPrefix, value: phoneDisplay, href: phoneLink },
     { label: t.emailPrefix, value: company.email, href: `mailto:${company.email}` },

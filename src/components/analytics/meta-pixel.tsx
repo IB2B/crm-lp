@@ -3,7 +3,6 @@
 import { useEffect } from "react"
 import Script from "next/script"
 
-import { bookingCalendarSrc } from "@/content/embeds"
 import { useConsent } from "@/lib/consent"
 
 const PIXEL_ID = "1655285189050807"
@@ -18,13 +17,13 @@ function eventFor(target: EventTarget | null): string | null {
   if (!link) return null
   if (link.hasAttribute("data-plan")) return "StartTrial"
   const href = link.getAttribute("href") ?? ""
-  if (href === bookingCalendarSrc) return "Lead"
   if (href.startsWith("https://wa.me/") || href.startsWith("tel:") || href.startsWith("mailto:")) return "Contact"
   return null
 }
 
 // Meta Pixel, loaded only after the visitor accepts cookies (GDPR).
-// Tracks PageView on load, then Lead / StartTrial / Contact clicks anywhere on the page.
+// Tracks PageView on load, then StartTrial / Contact clicks anywhere on the page.
+// Lead is sent by the booking page when a call is actually booked (src/components/booking/booking-flow.tsx).
 export function MetaPixel() {
   const consent = useConsent()
 

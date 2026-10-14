@@ -21,7 +21,7 @@ export const legalLinks: { label: string; href: string | null }[] = [
 ]
 
 /** Public URL of the site, used for share images and metadata. TODO(ib2b): set the real domain. */
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://crm.intelligentb2b.com"
 
 /** The section also hides itself while src/content/testimonials.ts is empty. */
 export const showTestimonials = true
@@ -38,7 +38,7 @@ export const socialLinks: { label: string; href: string | null }[] = [
 ]
 
 /**
- * TORCH booking calendar (GoHighLevel, permanent link). Every "Book a call", "Book a free
- * setup call" and "Video call" button opens it, and so do plan buttons without a checkout link.
+ * Our own booking page (/[lang]/book). It replaced the GoHighLevel booking widget: visitors book on
+ * the site and /api/booking creates the contact and appointment in GHL. Build links with bookingHref().
  */
-export const bookingCalendarSrc = "https://api.leadconnectorhq.com/widget/booking/G0rSuqw8F7nD13Jn91DH"
+export const bookingPath = "/book"

@@ -9,14 +9,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { bookingLinkProps, whatsappLink } from "@/content/embeds"
+import { bookingHref, whatsappLink } from "@/content/embeds"
 import { company } from "@/content/site"
 import { trialDays } from "@/content/pricing"
 import { fmt, type Locale } from "@/i18n/config"
 import type { FaqDict } from "@/i18n/dictionaries/faq"
 
 // Text comes from src/i18n/dictionaries/faq.ts.
-export function FaqSection({ t }: { t: FaqDict; lang: Locale }) {
+export function FaqSection({ t, lang }: { t: FaqDict; lang: Locale }) {
   const languages = t.languages
 
   return (
@@ -51,7 +51,7 @@ export function FaqSection({ t }: { t: FaqDict; lang: Locale }) {
           ) : null}
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
-            <Button size="xl" nativeButton={false} render={<a {...bookingLinkProps} />}>
+            <Button size="xl" nativeButton={false} render={<a href={bookingHref(lang)} />}>
               <CalendarDays data-icon="inline-start" />
               {t.bookCall}
             </Button>

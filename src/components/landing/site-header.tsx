@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { bookingLinkProps } from "@/content/embeds"
+import { bookingHref } from "@/content/embeds"
 import { BrandLogo } from "@/components/landing/brand-logo"
 import { HeaderShell } from "@/components/landing/header-shell"
 import { MobileMenu } from "@/components/landing/mobile-menu"
@@ -43,7 +43,7 @@ export function SiteHeader({ t, lang }: { t: ChromeDict; lang: Locale }) {
             <Button
               variant="ghost"
               nativeButton={false}
-              render={<a {...bookingLinkProps} />}
+              render={<a href={bookingHref(lang)} />}
               className="hidden h-10 px-3 lg:inline-flex"
             >
               {t.header.bookCall}

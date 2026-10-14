@@ -3,7 +3,7 @@
 import { CalendarDays, Menu, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { bookingLinkProps } from "@/content/embeds"
+import { bookingHref } from "@/content/embeds"
 import {
   Sheet,
   SheetClose,
@@ -75,7 +75,7 @@ export function MobileMenu({ t, lang }: { t: ChromeDict; lang: Locale }) {
         <SheetFooter className="mt-auto gap-3 border-t p-4">
           <SheetClose
             nativeButton={false}
-            render={<Button size="xl" variant="outline" nativeButton={false} render={<a {...bookingLinkProps} />} />}
+            render={<Button size="xl" variant="outline" nativeButton={false} render={<a href={bookingHref(lang)} />} />}
           >
             <CalendarDays data-icon="inline-start" />
             {m.bookSetupCall}
