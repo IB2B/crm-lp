@@ -38,7 +38,7 @@ export const socialLinks: { label: string; href: string | null }[] = [
 ]
 
 /**
- * TORCH booking calendar (GoHighLevel, permanent link). Every "Book a call", "Book a free
- * setup call" and "Video call" button opens it, and so do plan buttons without a checkout link.
+ * Our own booking page (/[lang]/book). It replaced the GoHighLevel booking widget: visitors book on
+ * the site and /api/booking creates the contact and appointment in GHL. Build links with bookingHref().
  */
-export const bookingCalendarSrc = "https://api.leadconnectorhq.com/widget/booking/G0rSuqw8F7nD13Jn91DH"
+export const bookingPath = "/book"

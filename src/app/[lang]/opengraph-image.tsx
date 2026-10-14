@@ -2,9 +2,20 @@ import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { ImageResponse } from "next/og"
 
-export const alt = "TORCH by Intelligent B2B: Never miss a customer again. We build it. You close the deals."
+import { isLocale } from "@/i18n/config"
+import { hero } from "@/i18n/dictionaries/hero"
+
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
+
+// One share image per language; its alt text (og:image:alt / twitter:image:alt) is the hero
+// headline in that language.
+export async function generateImageMetadata({ params }: { params: Promise<{ lang: string }> | { lang: string } }) {
+  const { lang } = await params
+  const t = hero[isLocale(lang) ? lang : "en"]
+  const by = lang === "ar" ? "TORCH من Intelligent B2B" : "TORCH by Intelligent B2B"
+  return [{ id: "default", alt: `${by}: ${t.headlineWords.join(" ")} ${t.headlineSecond}`, size, contentType }]
+}
 
 // Social share image (WhatsApp, LinkedIn, Facebook, X).
 export default async function OpengraphImage() {

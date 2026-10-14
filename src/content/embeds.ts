@@ -1,17 +1,16 @@
 // GoHighLevel and contact links. Leads must go into GHL, not a custom backend.
 
-import { bookingCalendarSrc } from "@/content/site"
-import type { Locale } from "@/i18n/config"
+import { bookingPath } from "@/content/site"
+import { localizeHref, type Locale } from "@/i18n/config"
 
-// The booking link itself lives in src/content/site.ts; re-exported here for existing imports.
-export { bookingCalendarSrc }
-
-/** Spread onto an <a> to open the booking page in a new tab. */
-export const bookingLinkProps = {
-  href: bookingCalendarSrc,
-  target: "_blank",
-  rel: "noopener noreferrer",
-} as const
+/**
+ * Link to the booking page in the current language, e.g. "/it/book" or "/it/book?plan=agency".
+ * Every "Book a call" button uses it; `plan` preselects the plan in the form.
+ */
+export function bookingHref(lang: Locale, plan?: "starter" | "growth" | "agency"): string {
+  const path = localizeHref(lang, bookingPath)
+  return plan ? `${path}?plan=${plan}` : path
+}
 
 /** Phone / WhatsApp: +39 339 5622 204 */
 export const phoneDisplay = "+39 339 5622 204"

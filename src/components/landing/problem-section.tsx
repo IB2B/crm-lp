@@ -2,12 +2,12 @@ import { ArrowRight } from "lucide-react"
 
 import { ProblemOutro } from "@/components/landing/problem-outro"
 import { Button } from "@/components/ui/button"
-import { bookingLinkProps } from "@/content/embeds"
+import { bookingHref } from "@/content/embeds"
 import type { Locale } from "@/i18n/config"
 import type { ProblemDict } from "@/i18n/dictionaries/problem"
 
 // Text comes from src/i18n/dictionaries/problem.ts.
-export function ProblemSection({ t }: { t: ProblemDict; lang: Locale }) {
+export function ProblemSection({ t, lang }: { t: ProblemDict; lang: Locale }) {
   return (
     <section aria-labelledby="problem-title" className="py-20 lg:py-28">
       <div className="mx-auto grid w-full max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
@@ -24,7 +24,7 @@ export function ProblemSection({ t }: { t: ProblemDict; lang: Locale }) {
           <Button
             size="xl"
             nativeButton={false}
-            render={<a {...bookingLinkProps} />}
+            render={<a href={bookingHref(lang)} />}
             className="mt-8 w-full sm:w-auto"
           >
             {t.cta}

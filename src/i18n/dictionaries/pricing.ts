@@ -11,11 +11,12 @@ const en = {
   yearly: "Yearly",
   monthsFree: "{n} months free",
   mostPopular: "Most popular",
-  perMonth: "/month + IVA",
-  billedYearlyTotal: "{price} + IVA billed yearly",
+  perMonth: "/month",
+  billedYearlyTotal: "{price} billed yearly",
   billedMonthly: "Billed monthly",
   billedYearly: "Billed yearly",
   startTrial: "Start my {n}-day free trial",
+  partnerCall: "Book a partner call",
   planIncludes: "This plan includes",
   plans: {
     starter: {
@@ -87,11 +88,12 @@ const it: PricingDict = {
   yearly: "Annuale",
   monthsFree: "{n} mesi gratis",
   mostPopular: "Il più scelto",
-  perMonth: "/mese + IVA",
-  billedYearlyTotal: "{price} + IVA fatturati ogni anno",
+  perMonth: "/mese",
+  billedYearlyTotal: "{price} fatturati ogni anno",
   billedMonthly: "Fatturato ogni mese",
   billedYearly: "Fatturato ogni anno",
   startTrial: "Inizia la prova gratuita di {n} giorni",
+  partnerCall: "Prenota una chiamata partner",
   planIncludes: "Questo piano include",
   plans: {
     starter: {
@@ -172,11 +174,12 @@ const fr: PricingDict = {
   yearly: "Annuel",
   monthsFree: "{n} mois offerts",
   mostPopular: "Le plus choisi",
-  perMonth: "/mois + TVA",
-  billedYearlyTotal: "{price} + TVA facturés à l'année",
+  perMonth: "/mois",
+  billedYearlyTotal: "{price} facturés à l'année",
   billedMonthly: "Facturé chaque mois",
   billedYearly: "Facturé chaque année",
   startTrial: "Commencer mon essai gratuit de {n} jours",
+  partnerCall: "Réserver un appel partenaire",
   planIncludes: "Cette formule comprend",
   plans: {
     starter: {
@@ -262,11 +265,12 @@ const ar: PricingDict = {
   // Arabic counts two as a dual ("شهران"), so no {n} here. Update it if yearlyFreeMonths changes.
   monthsFree: "شهران مجانًا",
   mostPopular: "الأكثر اختيارًا",
-  perMonth: "/شهريًا + ضريبة القيمة المضافة",
-  billedYearlyTotal: "{price} + ضريبة القيمة المضافة، تُدفع سنويًا",
+  perMonth: "/شهريًا",
+  billedYearlyTotal: "{price}، تُدفع سنويًا",
   billedMonthly: "الدفع شهريًا",
   billedYearly: "الدفع سنويًا",
   startTrial: "ابدأ تجربتي المجانية لمدة {n} يومًا",
+  partnerCall: "احجز مكالمة شراكة",
   planIncludes: "تشمل هذه الخطة",
   plans: {
     starter: {

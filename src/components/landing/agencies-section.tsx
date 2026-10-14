@@ -4,7 +4,7 @@ import { useId, useState } from "react"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { company } from "@/content/site"
+import { bookingHref } from "@/content/embeds"
 import { fmt, type Locale } from "@/i18n/config"
 import type { AgenciesDict } from "@/i18n/dictionaries/agencies"
 
@@ -99,7 +99,7 @@ function EarningsCalculator({ t }: { t: AgenciesDict["calculator"] }) {
   )
 }
 
-export function AgenciesSection({ t }: { t: AgenciesDict; lang: Locale }) {
+export function AgenciesSection({ t, lang }: { t: AgenciesDict; lang: Locale }) {
   return (
     <section
       id="agencies"
@@ -139,7 +139,7 @@ export function AgenciesSection({ t }: { t: AgenciesDict; lang: Locale }) {
             <Button
               size="xl"
               nativeButton={false}
-              render={<a href={`mailto:${company.salesEmail}?subject=${encodeURIComponent(t.emailSubject)}`} />}
+              render={<a href={bookingHref(lang, "agency")} />}
               className="mt-10 w-full sm:w-auto"
             >
               {t.cta}

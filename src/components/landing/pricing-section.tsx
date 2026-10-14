@@ -5,7 +5,7 @@ import Image from "next/image"
 import { ArrowRight, Check } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { bookingCalendarSrc } from "@/content/embeds"
+import { bookingHref } from "@/content/embeds"
 import { cn } from "@/lib/utils"
 import { fmt, type Locale } from "@/i18n/config"
 import type { PricingDict } from "@/i18n/dictionaries/pricing"
@@ -157,7 +157,7 @@ function IncludedInEveryPlan({ t }: { t: PricingDict }) {
 }
 
 // Text comes from src/i18n/dictionaries/pricing.ts; numbers and links from src/content/pricing.ts.
-export function PricingSection({ t }: { t: PricingDict; lang: Locale }) {
+export function PricingSection({ t, lang }: { t: PricingDict; lang: Locale }) {
   const [billing, setBilling] = useState<Billing>("monthly")
 
   const perMonth = (monthly: number | null) =>
@@ -255,30 +255,43 @@ export function PricingSection({ t }: { t: PricingDict; lang: Locale }) {
                   )}
                 </div>
 
-                <Button
-                  size="xl"
-                  variant={plan.popular ? "default" : "outline"}
-                  nativeButton={false}
-                  render={
-                    <a
-                      // Without a checkout link, the button opens the booking calendar.
-                      href={link ?? bookingCalendarSrc}
-                      {...(link ? {} : { target: "_blank", rel: "noopener noreferrer" })}
-                      data-plan={plan.id}
-                      data-billing={billing}
-                      onClick={(e) => {
-                        if (!link) return
-                        e.preventDefault()
-                        window.location.assign(withTracking(link))
-                      }}
-                    />
-                  }
-                  // Longer translations (e.g. French) wrap onto two lines instead of widening the card.
-                  className="mt-8 h-auto min-h-12 w-full py-3 text-center whitespace-normal"
-                >
-                  {fmt(t.startTrial, { n: trialDays })}
-                  <ArrowRight data-icon="inline-end" className="rtl:-scale-x-100" />
-                </Button>
+                {plan.id === "agency" ? (
+                  // Agency is sold on a call: the button books a partner call with the plan preselected.
+                  <Button
+                    size="xl"
+                    variant={plan.popular ? "default" : "outline"}
+                    nativeButton={false}
+                    render={<a href={bookingHref(lang, "agency")} />}
+                    className="mt-8 h-auto min-h-12 w-full py-3 text-center whitespace-normal"
+                  >
+                    {t.partnerCall}
+                    <ArrowRight data-icon="inline-end" className="rtl:-scale-x-100" />
+                  </Button>
+                ) : (
+                  <Button
+                    size="xl"
+                    variant={plan.popular ? "default" : "outline"}
+                    nativeButton={false}
+                    render={
+                      <a
+                        // Without a checkout link yet, the button opens the booking page with the plan preselected.
+                        href={link ?? bookingHref(lang, plan.id)}
+                        data-plan={plan.id}
+                        data-billing={billing}
+                        onClick={(e) => {
+                          if (!link) return
+                          e.preventDefault()
+                          window.location.assign(withTracking(link))
+                        }}
+                      />
+                    }
+                    // Longer translations (e.g. French) wrap onto two lines instead of widening the card.
+                    className="mt-8 h-auto min-h-12 w-full py-3 text-center whitespace-normal"
+                  >
+                    {fmt(t.startTrial, { n: trialDays })}
+                    <ArrowRight data-icon="inline-end" className="rtl:-scale-x-100" />
+                  </Button>
+                )}
 
                 <div className="mt-8 border-t pt-6">
                   <p className="text-sm font-medium">{t.planIncludes}</p>

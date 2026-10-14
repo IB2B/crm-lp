@@ -41,7 +41,7 @@ export const plans: Plan[] = [
   {
     id: "agency",
     name: "Agency",
-    monthly: 397,
+    monthly: 297,
     checkout: {
       monthly: null, // [PASTE LINK] Agency monthly
       yearly: null, // [PASTE LINK] Agency yearly
@@ -51,7 +51,9 @@ export const plans: Plan[] = [
 
 /**
  * Old "Unlimited" plan link (€297) from crm.intelligentb2b.com.
- * Kept for reference only. Do NOT use it for Agency: the price is wrong.
+ * Kept for reference only. Agency is now €297 too, but this link sells the old Unlimited plan:
+ * only use it for Agency once someone confirms it's the right Stripe product.
+ * (Today the Agency button books a partner call instead.)
  */
 export const oldUnlimited = "https://buy.stripe.com/dRmfZj1Nx4MMgRu3UZ6c00t"
 

@@ -15,6 +15,7 @@ import { ProblemSection } from "@/components/landing/problem-section";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { SiteHeader } from "@/components/landing/site-header";
 import { TestimonialsSection } from "@/components/landing/testimonials-section";
+import { HomeStructuredData } from "@/components/structured-data";
 import { showTestimonials } from "@/content/site";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
@@ -27,6 +28,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
 
   return (
     <>
+      <HomeStructuredData lang={lang} dict={dict} />
       <SiteHeader t={dict.chrome} lang={lang} />
       <main id="main" tabIndex={-1} className="flex-1 outline-none">
         <Hero t={dict.hero} lang={lang} />

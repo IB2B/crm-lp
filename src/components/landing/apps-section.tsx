@@ -1,4 +1,5 @@
 import { brandPaths, type Brand } from "@/components/landing/brand-icons"
+import { UnderlineOnView } from "@/components/landing/underline-on-view"
 import type { Locale } from "@/i18n/config"
 import type { AppsDict } from "@/i18n/dictionaries/apps"
 
@@ -39,19 +40,21 @@ const marqueeCss = `
 
 export function AppsSection({ t }: { t: AppsDict; lang: Locale }) {
   return (
-    <section id="apps" aria-labelledby="apps-title" className="scroll-mt-16 overflow-hidden py-16 lg:py-20">
+    <section id="apps" aria-labelledby="apps-title" className="scroll-mt-16 overflow-hidden py-20 lg:py-28">
       <style>{marqueeCss}</style>
-      <h2
-        id="apps-title"
-        className="mx-auto max-w-6xl px-4 text-center text-sm font-medium text-muted-foreground sm:px-6"
-      >
-        {t.title}
-      </h2>
+      <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
+        <h2 id="apps-title" className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+          {t.title}
+        </h2>
+        <p className="mt-4 text-base leading-relaxed text-balance text-muted-foreground sm:text-lg">
+          {t.intro} <UnderlineOnView className="font-semibold text-foreground">{t.introStrong}</UnderlineOnView>
+        </p>
+      </div>
 
       {/* dir="ltr" keeps the translateX(-50%) loop seamless on right-to-left pages */}
       <div
         dir="ltr"
-        className="mt-8 flex flex-col gap-6"
+        className="mt-12 flex flex-col gap-7 lg:mt-14"
         style={{ maskImage: "linear-gradient(to right, transparent, black 12%, black 88%, transparent)" }}
       >
         {rows.map((row, r) => (
@@ -61,9 +64,9 @@ export function AppsSection({ t }: { t: AppsDict; lang: Locale }) {
                 {row.map((app) => (
                   <li
                     key={app.name}
-                    className="flex items-center gap-2.5 px-7 text-lg font-medium whitespace-nowrap text-foreground/55"
+                    className="flex items-center gap-3 px-8 text-xl font-medium whitespace-nowrap text-foreground/80"
                   >
-                    <svg viewBox="0 0 24 24" aria-hidden="true" className="size-6 shrink-0 fill-current">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" className="size-7 shrink-0 fill-current">
                       <path d={brandPaths[app.brand]} />
                     </svg>
                     {app.name}

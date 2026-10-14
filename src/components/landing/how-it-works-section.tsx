@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { bookingLinkProps } from "@/content/embeds"
+import { bookingHref } from "@/content/embeds"
 import type { Locale } from "@/i18n/config"
 import type { HowItWorksDict } from "@/i18n/dictionaries/howItWorks"
 
@@ -27,7 +27,7 @@ const stepStyles = [
   },
 ]
 
-export function HowItWorksSection({ t }: { t: HowItWorksDict; lang: Locale }) {
+export function HowItWorksSection({ t, lang }: { t: HowItWorksDict; lang: Locale }) {
   return (
     <section
       id="how-it-works"
@@ -64,7 +64,7 @@ export function HowItWorksSection({ t }: { t: HowItWorksDict; lang: Locale }) {
           <Button
             size="xl"
             nativeButton={false}
-            render={<a {...bookingLinkProps} />}
+            render={<a href={bookingHref(lang)} />}
             className="w-full sm:w-auto"
           >
             {t.cta}

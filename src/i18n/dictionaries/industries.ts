@@ -3,7 +3,7 @@ import type { Locale } from "@/i18n/config"
 // "Made for businesses like yours": one tab per industry, in two groups (agencies, local businesses).
 // Items are zipped with icons by `value` in industries-section.tsx, so keep the same order and values
 // in every language. "marketing-agencies" has no message: it shows a client-list mockup and links
-// to the agency (partner) section instead.
+// instead.
 const en = {
   eyebrow: "Industries",
   title: "Made for businesses like yours.",
@@ -13,8 +13,9 @@ const en = {
   groupAgencies: "For agencies",
   groupLocal: "For local businesses",
   clientsHeading: "Your clients",
+  clientAccounts: "{n} client accounts",
+  clientActive: "Active",
   newClient: "New client added",
-  partnerCta: "Become a partner",
   items: [
     {
       value: "marketing-agencies",
@@ -126,8 +127,9 @@ const it: IndustriesDict = {
   groupAgencies: "Per le agenzie",
   groupLocal: "Per le attività locali",
   clientsHeading: "I tuoi clienti",
+  clientAccounts: "{n} account clienti",
+  clientActive: "Attivo",
   newClient: "Nuovo cliente aggiunto",
-  partnerCta: "Diventa partner",
   items: [
     {
       value: "marketing-agencies",
@@ -237,8 +239,9 @@ const fr: IndustriesDict = {
   groupAgencies: "Pour les agences",
   groupLocal: "Pour les commerces locaux",
   clientsHeading: "Vos clients",
+  clientAccounts: "{n} comptes clients",
+  clientActive: "Actif",
   newClient: "Nouveau client ajouté",
-  partnerCta: "Devenir partenaire",
   items: [
     {
       value: "marketing-agencies",
@@ -348,8 +351,9 @@ const ar: IndustriesDict = {
   groupAgencies: "للوكالات",
   groupLocal: "للأعمال المحلية",
   clientsHeading: "عملاؤك",
+  clientAccounts: "{n} حسابات عملاء",
+  clientActive: "نشط",
   newClient: "تمت إضافة عميل جديد",
-  partnerCta: "كن شريكًا",
   items: [
     {
       value: "marketing-agencies",
