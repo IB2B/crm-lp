@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { ArrowRight, Check } from "lucide-react"
 
@@ -15,6 +15,7 @@ import {
   trialDays,
   yearlyFreeMonths,
   type Billing,
+  type Plan,
 } from "@/content/pricing"
 import { withTracking } from "@/lib/tracking"
 
@@ -160,12 +161,9 @@ function IncludedInEveryPlan({ t }: { t: PricingDict }) {
 export function PricingSection({ t, lang }: { t: PricingDict; lang: Locale }) {
   const [billing, setBilling] = useState<Billing>("monthly")
 
-  const perMonth = (monthly: number | null) =>
-    monthly === null
-      ? null
-      : billing === "monthly"
-        ? monthly
-        : (monthly * (12 - yearlyFreeMonths)) / 12
+  // Yearly shows the monthly equivalent big (€970 → €81), with the yearly total underneath.
+  const perMonth = (plan: Plan) =>
+    billing === "monthly" ? plan.monthly : plan.yearly === null ? null : plan.yearly / 12
 
   return (
     <section id="pricing" aria-labelledby="pricing-title" className="scroll-mt-16 bg-muted/40 py-20 lg:py-28">
@@ -219,7 +217,7 @@ export function PricingSection({ t, lang }: { t: PricingDict; lang: Locale }) {
 
         <div className="mt-12 grid grid-cols-1 items-stretch gap-6 lg:mt-16 lg:grid-cols-3">
           {plans.map((plan) => {
-            const price = perMonth(plan.monthly)
+            const price = perMonth(plan)
             const link = plan.checkout[billing]
             const text = t.plans[plan.id]
             return (
@@ -246,9 +244,15 @@ export function PricingSection({ t, lang }: { t: PricingDict; lang: Locale }) {
                   <span className="text-muted-foreground">{t.perMonth}</span>
                 </p>
                 <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                  {billing === "yearly" && plan.monthly !== null ? (
+                  {billing === "yearly" && plan.yearly !== null ? (
+                    // <bdi dir="ltr"> keeps "€1,970" in order when the price sits after Arabic text.
                     <span className="tabular-nums">
-                      {fmt(t.billedYearlyTotal, { price: euro(plan.monthly * (12 - yearlyFreeMonths)) })}
+                      {t.billedYearlyTotal.split("{price}").map((part, i) => (
+                        <Fragment key={i}>
+                          {i > 0 ? <bdi dir="ltr">{euro(plan.yearly)}</bdi> : null}
+                          {part}
+                        </Fragment>
+                      ))}
                     </span>
                   ) : (
                     <span>{billing === "monthly" ? t.billedMonthly : t.billedYearly}</span>
@@ -274,7 +278,8 @@ export function PricingSection({ t, lang }: { t: PricingDict; lang: Locale }) {
                     nativeButton={false}
                     render={
                       <a
-                        // Without a checkout link yet, the button opens the booking page with the plan preselected.
+                        // Opens the Stripe checkout for the selected billing in the same tab, keeping ad tracking
+                        // parameters. Without a checkout link, it opens the booking page with the plan preselected.
                         href={link ?? bookingHref(lang, plan.id)}
                         data-plan={plan.id}
                         data-billing={billing}
