@@ -32,6 +32,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Pages only: skip the API, Next.js internals and any file with an extension (images, icons…).
-  matcher: ["/((?!api|_next|.*\\..*).*)"],
+  // Pages only: skip the API, Next.js internals, Vercel BotID's own routes (added by withBotId in
+  // next.config.ts) and any file with an extension (images, icons…).
+  matcher: ["/((?!api|_next|149e9513-01fa-4fb0-aad4-566afd725d1b|.*\\..*).*)"],
 }

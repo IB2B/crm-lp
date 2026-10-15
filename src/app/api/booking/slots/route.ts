@@ -1,6 +1,7 @@
 import { BOOKING_DAYS, isValidTimeZone, type SlotsResponse } from "@/lib/booking"
 import { GhlError, getFreeSlots, ghlBookingConfig } from "@/lib/ghl"
 import { clientIp, rateLimit } from "@/lib/rate-limit"
+import { isSameSite } from "@/lib/request-guard"
 
 const DAY = 24 * 60 * 60 * 1000
 
@@ -21,8 +22,15 @@ export async function GET(request: Request) {
   const config = ghlBookingConfig()
   if (!config) return reply({ ok: false, code: "unavailable" }, 503)
 
+  // Each request costs a GHL API call: only our own booking page may ask (see src/lib/request-guard.ts).
+  if (!isSameSite(request)) {
+    console.warn("[booking/slots] cross-site request rejected")
+    return reply({ ok: false, code: "failed" }, 403)
+  }
+
   // Generous limit: the page loads slots once, plus a refresh if a slot gets taken.
   if (!rateLimit(`slots:${clientIp(request)}`, 60, 10 * 60 * 1000)) {
+    console.warn("[booking/slots] rate limited")
     return reply({ ok: false, code: "rate_limited" }, 429)
   }
 
