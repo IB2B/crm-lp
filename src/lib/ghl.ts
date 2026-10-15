@@ -1,12 +1,12 @@
-// All GoHighLevel (LeadConnector) API v2 calls used by the booking page, in one server-only module.
-// Endpoints, Version headers and fields are checked against HighLevel's official OpenAPI specs
-// (github.com/GoHighLevel/highlevel-api-docs, apps/calendars.json, contacts.json, locations.json).
+// All GoHighLevel (LeadConnector) API v2 calls used by the booking page and the newsletter, in one
+// server-only module. Endpoints, Version headers and fields are checked against HighLevel's official
+// OpenAPI specs (github.com/GoHighLevel/highlevel-api-docs, apps/calendars.json, contacts.json, locations.json).
 //
 // The token and IDs come from server environment variables (no NEXT_PUBLIC_ prefix), so they never
 // reach the browser. Only import this file from route handlers and server components.
 //
-// Private Integration scopes needed: calendars.readonly, calendars/events.write, contacts.write,
-// locations/customFields.readonly.
+// Private Integration scopes needed: calendars.readonly, calendars/events.write, contacts.readonly,
+// contacts.write, locations/customFields.readonly.
 
 const BASE_URL = "https://services.leadconnectorhq.com"
 
@@ -17,7 +17,10 @@ const LOCATIONS_VERSION = "2021-07-28"
 
 const TIMEOUT_MS = 10_000
 
-export type GhlConfig = { token: string; locationId: string; calendarId: string }
+/** Enough for contact calls (booking and newsletter). */
+export type GhlAuth = { token: string; locationId: string }
+/** Booking also needs the calendar. */
+export type GhlConfig = GhlAuth & { calendarId: string }
 
 /** The three booking variables, or null when any is missing (the booking API then answers 503). */
 export function ghlBookingConfig(): GhlConfig | null {
@@ -40,7 +43,7 @@ export class GhlError extends Error {
 }
 
 async function ghl<T>(
-  config: GhlConfig,
+  config: GhlAuth,
   path: string,
   init: { method?: "GET" | "POST"; version: string; body?: unknown; query?: Record<string, string> }
 ): Promise<T> {
@@ -134,34 +137,59 @@ export async function addAppointmentNote(config: GhlConfig, appointmentId: strin
 
 /* ---------- Contacts ---------- */
 
+// Anyone can type any email into a public form, so form data must never overwrite an existing
+// contact (its name, phone, tags…). The forms first look for an existing contact with
+// findExistingContact, and only create one with upsertContact when there is none.
+
+type DuplicateContactResponse = { contact?: { id?: string } | null }
+
+/**
+ * GET /contacts/search/duplicate: the contact GHL would match for this email (and phone), using the
+ * location's "Allow Duplicate Contact" rules, i.e. the same matching upsert uses. Null when there is none.
+ */
+export async function findExistingContact(config: GhlAuth, match: { email: string; phone?: string }): Promise<string | null> {
+  const data = await ghl<DuplicateContactResponse>(config, "/contacts/search/duplicate", {
+    version: CONTACTS_VERSION,
+    query: { locationId: config.locationId, email: match.email, ...(match.phone ? { number: match.phone } : {}) },
+  })
+  // The response isn't described in the spec. If it ever changes shape, stop here rather than
+  // fall through to an upsert that could overwrite an existing contact.
+  if (!("contact" in data)) {
+    throw new GhlError("GET /contacts/search/duplicate: unexpected response", 200, JSON.stringify(data).slice(0, 2000))
+  }
+  return data.contact?.id ?? null
+}
+
 export type ContactInput = {
-  firstName: string
-  lastName: string
-  companyName: string
   email: string
-  phone: string
+  firstName?: string
+  lastName?: string
+  companyName?: string
+  phone?: string
   timezone?: string
+  source?: string
   customFields?: { id: string; field_value: string }[]
 }
 
 type UpsertContactResponse = { new?: boolean; contact: { id: string } }
 
 /**
- * POST /contacts/upsert. Tags are NOT sent here: on upsert they replace all of a returning
- * contact's tags. Use addContactTags instead.
+ * POST /contacts/upsert. Only call it after findExistingContact found nothing: on an existing contact
+ * it would overwrite the fields sent. Tags are NOT sent here (on upsert they replace all of a contact's
+ * tags); use addContactTags instead.
  */
-export async function upsertContact(config: GhlConfig, input: ContactInput): Promise<{ id: string; isNew: boolean }> {
+export async function upsertContact(config: GhlAuth, input: ContactInput): Promise<{ id: string; isNew: boolean }> {
   const data = await ghl<UpsertContactResponse>(config, "/contacts/upsert", {
     method: "POST",
     version: CONTACTS_VERSION,
-    body: { locationId: config.locationId, source: "TORCH booking page", ...input },
+    body: { locationId: config.locationId, ...input },
   })
   if (!data.contact?.id) throw new GhlError("POST /contacts/upsert: no contact id in response", 200, JSON.stringify(data).slice(0, 2000))
   return { id: data.contact.id, isNew: Boolean(data.new) }
 }
 
 /** POST /contacts/{contactId}/tags: adds tags, keeps the ones the contact already has. */
-export async function addContactTags(config: GhlConfig, contactId: string, tags: string[]): Promise<void> {
+export async function addContactTags(config: GhlAuth, contactId: string, tags: string[]): Promise<void> {
   await ghl(config, `/contacts/${encodeURIComponent(contactId)}/tags`, {
     method: "POST",
     version: CONTACTS_VERSION,

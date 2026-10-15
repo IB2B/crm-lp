@@ -29,9 +29,11 @@ export default async function Page({ params, searchParams }: PageProps<"/[lang]/
   if (!isLocale(lang)) notFound()
   const t = booking[lang]
 
-  // ?plan=starter|growth|agency preselects the plan in the form.
+  // ?plan=starter|growth|agency preselects the plan in the form. Object.hasOwn so names every object
+  // has (?plan=constructor, ?plan=__proto__) don't count as plans.
   const planParam = (await searchParams).plan
-  const initialPlan = typeof planParam === "string" ? (PLAN_FROM_QUERY[planParam.toLowerCase()] ?? "") : ""
+  const planKey = typeof planParam === "string" ? planParam.toLowerCase() : ""
+  const initialPlan = Object.hasOwn(PLAN_FROM_QUERY, planKey) ? PLAN_FROM_QUERY[planKey] : ""
   const home = localizeHref(lang, "/")
 
   return (
