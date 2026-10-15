@@ -1,4 +1,4 @@
-// Single source of truth for TORCH prices (EUR / month) and checkout links.
+// Single source of truth for TORCH prices (EUR) and checkout links. Change them here only.
 // Prices are + IVA. They match the GHL plans (Standard→Starter, Professionale→Growth, Premium→Agency).
 // Every plan includes every feature; plans differ only by workspaces and service level.
 // Yearly = 10× monthly (2 months free).
@@ -12,9 +12,12 @@ export type PlanId = "starter" | "growth" | "agency"
 export type Plan = {
   id: PlanId
   name: string
+  /** € per month, billed monthly. */
   monthly: number | null
+  /** € per year, billed yearly. The card shows it divided by 12, with the yearly total underneath. */
+  yearly: number | null
   popular?: boolean
-  /** GoHighLevel checkout links. Paste them here; while null, the button opens the booking calendar. */
+  /** Stripe checkout links, opened in the same tab. While null, the button opens the booking page instead. */
   checkout: Record<Billing, string | null>
 }
 
@@ -23,28 +26,32 @@ export const plans: Plan[] = [
     id: "starter",
     name: "Starter",
     monthly: 97,
+    yearly: 970,
     popular: true,
     checkout: {
-      monthly: "https://buy.stripe.com/5kQ14p9fZgvugRu4Z36c00s",
-      yearly: null, // [PASTE LINK] Starter yearly
+      monthly: "https://buy.stripe.com/cNi4gBak3gvugRubnr6c00z",
+      yearly: "https://buy.stripe.com/3cIeVfdwf4MMbxaajn6c00A",
     },
   },
   {
     id: "growth",
     name: "Growth",
     monthly: 197,
+    yearly: 1970,
     checkout: {
-      monthly: null, // [PASTE LINK] Growth monthly
-      yearly: null, // [PASTE LINK] Growth yearly
+      monthly: "https://buy.stripe.com/cNi7sN3VF0ww7gU3UZ6c00B",
+      yearly: "https://buy.stripe.com/4gM5kF9fZ4MM0Sw9fj6c00C",
     },
   },
   {
     id: "agency",
     name: "Agency",
     monthly: 297,
+    yearly: 2970,
+    // Agency is sold on a call: its button always books a partner call (/book?plan=agency).
     checkout: {
-      monthly: null, // [PASTE LINK] Agency monthly
-      yearly: null, // [PASTE LINK] Agency yearly
+      monthly: null,
+      yearly: null,
     },
   },
 ]
@@ -57,7 +64,7 @@ export const plans: Plan[] = [
  */
 export const oldUnlimited = "https://buy.stripe.com/dRmfZj1Nx4MMgRu3UZ6c00t"
 
-/** Yearly billing: pay for 10 months, get 12. */
+/** Yearly billing: pay for 10 months, get 12. Shown as the badge on the Yearly toggle. */
 export const yearlyFreeMonths = 2
 
 /** Free trial length shown on the buttons. */
